@@ -1,20 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Harutech – Products</title>
+  <title>Products - Haru Tech</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .product {
+      display: flex;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+    .product img {
+      height: 100px;
+      margin-right: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+  </style>
 </head>
 <body>
   <header>
-    <div><strong>Harutech</strong></div>
-    <nav><a href="index.html">Home</a><a href="products.html">Products</a><a href="download.html">Download</a><a href="vision.html">Vision</a><a href="contact.html">Contact</a></nav>
+    <div><strong>Haru Tech</strong></div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="download.html">Download</a>
+      <a href="vision.html">Vision</a>
+      <a href="contact.html">Contact</a>
+    </nav>
   </header>
   <div class="container">
-    <h1>Our Products</h1><ul><li>Thea Bee POS 1.0</li><li>Haru POS 1.0</li></ul>
+    <h1>Our Products</h1>
+    <div class="product">
+      <img src="images/thea_bee_pos_logo.png" alt="Thea Bee POS">
+      <div>
+        <h2>Thea Bee POS 1.0</h2>
+        <p>Smart billing for hotels and restaurants. Fast, intuitive and made for real-world use.</p>
+      </div>
+    </div>
+    <div class="product">
+      <img src="images/haru_pos_logo.png" alt="Haru POS">
+      <div>
+        <h2>Haru POS 1.0</h2>
+        <p>Bookstore billing with love — made for simplicity, accuracy and emotion-driven UX.</p>
+      </div>
+    </div>
   </div>
   <footer>
     CEO: Haru Theav Yuki<br>
-    © 2025 Harutech. All rights reserved.
+    © 2025 Haru Tech. All rights reserved.
   </footer>
 </body>
 </html>

@@ -1,16 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Haru Tech – Products</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Products - Haru Tech</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Roboto', sans-serif; background: #f5f7fa; color: #333; }
+
+    header {
+      background: #0d1e3f;
+      padding: 15px 30px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header img {
+      height: 40px;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .hero {
+      background: #1f3b70;
+      color: white;
+      padding: 50px 30px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+    }
+
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 40px 20px;
+      background: #f0f3f8;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      width: 280px;
+      margin: 15px;
+      padding: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .card img {
+      height: 60px;
+      margin-bottom: 15px;
+    }
+
+    .card h3 {
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+
+    footer {
+      background: #ecf0f1;
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
 </head>
 <body>
-  
+
 <header>
-  <div style="display: flex; align-items: center;">
-    <img src="images/harutech_logo.png" alt="Haru Tech Logo" style="height:40px; margin-right:15px;">
-    <strong style="font-size: 20px;">Haru Tech</strong>
-  </div>
+  <img src="logo.png" alt="Haru Tech Logo" />
   <nav>
     <a href="index.html">Home</a>
     <a href="products.html">Products</a>
@@ -20,20 +99,37 @@
   </nav>
 </header>
 
-  <div class="container">
-    
-    <h1>Our Products</h1>
-    <div class="product">
-      <img src="images/thea_bee_pos_logo.png" alt="Thea Bee POS">
-      <div>
-        <h2>Thea Bee POS 1.0</h2>
-        <p>Smart billing for hotels and restaurants. Fast, intuitive and made for real-world use.</p>
-      
+<section class="hero">
+  <h1>Our Products</h1>
+  <p>Explore the innovative software built to bridge India 🇮🇳 and Cambodia 🇰🇭.</p>
+</section>
+
+<section class="products">
+  <div class="card">
+    <img src="thea-bee-logo.png" alt="Thea Bee Logo">
+    <h3>Thea Bee POS 1.0</h3>
+    <p>Smart hotel billing. Table orders, fast print bills, and real-time reports.</p>
   </div>
-  
+  <div class="card">
+    <img src="haru-pos-logo.png" alt="Haru POS Logo">
+    <h3>Haru POS 1.0</h3>
+    <p>Love for bookshops. Stock, bills, and customers — managed with grace.</p>
+  </div>
+  <div class="card">
+    <img src="spring-studio-logo.png" alt="Spring Studio Logo">
+    <h3>Spring Studio</h3>
+    <p>Voice dubbing, storytelling, and emotional narration with AI precision.</p>
+  </div>
+  <div class="card">
+    <img src="touch-heal-logo1.png" alt="Touch Heal Logo">
+    <h3>Touch Heal</h3>
+    <p>Health, lab tests, emergency, and pharmacy in one united app.</p>
+  </div>
+</section>
+
 <footer>
-  CEO: Haru Theav Yuki<br>
-  © 2025 Haru Tech. All rights reserved.
+  <p>CEO: Haru Theav Yuki</p>
+  <p>© 2025 Haru Tech. All rights reserved.</p>
 </footer>
 
 </body>

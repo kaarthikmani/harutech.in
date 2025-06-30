@@ -4,94 +4,105 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HaruTech | The New Permanent</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Poppins', sans-serif; background: #fdfcff; color: #333; overflow-x: hidden; }
+    body { font-family: 'Poppins', sans-serif; background: #fdfcff; color: #333; }
 
     header {
-      background: linear-gradient(to right, #4a00e0, #8e2de2);
-      padding: 20px 30px;
+      background: linear-gradient(to right, #8e2de2, #4a00e0);
+      color: white;
+      padding: 30px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      color: white;
     }
 
     .logo {
       display: flex;
       align-items: center;
     }
+
     .logo img {
       height: 40px;
       margin-right: 10px;
     }
-    .logo span {
-      font-weight: 600;
-      font-size: 1.4rem;
-    }
 
     nav a {
       color: white;
-      text-decoration: none;
       margin-left: 20px;
+      text-decoration: none;
       font-weight: 500;
     }
 
-    .tagline {
-      text-align: center;
-      font-size: 1.2rem;
-      margin-top: 10px;
-      font-weight: 600;
-      color: white;
+    nav a:hover {
+      text-decoration: underline;
     }
 
     .hero {
-      background: linear-gradient(to right, #4a00e0, #8e2de2);
-      color: white;
-      padding: 30px 20px;
       text-align: center;
-      position: relative;
+      background: linear-gradient(to right, #8e2de2, #4a00e0);
+      color: white;
+      padding: 60px 20px 30px;
     }
 
-    .buttons {
-      margin: 25px 0;
+    .hero h2 {
+      font-size: 1rem;
+      margin-bottom: 10px;
+      color: #ffd;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      font-size: 1rem;
+      margin-bottom: 25px;
     }
 
     .buttons a {
-      padding: 12px 22px;
+      display: inline-block;
       margin: 10px;
-      border-radius: 5px;
+      padding: 10px 20px;
+      border-radius: 6px;
+      color: white;
       text-decoration: none;
       font-weight: bold;
-      display: inline-block;
     }
 
-    .buttons .store-btn {
+    .buttons .store {
       background-color: #e91e63;
-      color: white;
     }
 
-    .buttons .product-btn {
+    .buttons .products {
       background-color: #00bcd4;
-      color: white;
     }
 
-    .illustration {
-      width: 100%;
-      max-height: 480px;
+    .showcase {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 40px 20px 60px;
+      background: #f3f6fb;
+      gap: 30px;
+    }
+
+    .showcase img {
+      width: 300px;
+      height: 220px;
       object-fit: cover;
-      display: block;
-      margin: 0 auto;
-      border-radius: 15px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
     footer {
       background: #1a1a1a;
-      color: #aaa;
+      padding: 30px;
       text-align: center;
       font-size: 0.9rem;
-      padding: 20px;
+      color: #aaa;
     }
 
     footer a {
@@ -99,13 +110,9 @@
       text-decoration: none;
       margin: 0 10px;
     }
+
     footer a:hover {
       text-decoration: underline;
-    }
-
-    @media (max-width: 600px) {
-      .hero h1 { font-size: 1.5rem; }
-      .tagline { font-size: 1rem; }
     }
   </style>
 </head>
@@ -113,26 +120,31 @@
 
   <header>
     <div class="logo">
-      <img src="logo.png" alt="HaruTech Logo">
-      <span>HARU TECH</span>
+      <img src="logo.png" alt="HaruTech Logo" />
+      <h2>HARU TECH</h2>
     </div>
     <nav>
-      <a href="#">Login</a>
+      <a href="index.html">Home</a>
+      <a href="store.html">Store</a>
+      <a href="products.html">Products</a>
+      <a href="login.html">Login</a>
     </nav>
   </header>
 
   <section class="hero">
-    <div class="tagline">The New Permanent</div>
-
-    <h1 style="margin-top: 30px;">Discover Our Store and Products</h1>
+    <h2>The New Permanent</h2>
+    <h1>Discover Our Store and Products</h1>
     <p>Buy books, sarees, and software that connect India & Cambodia</p>
-
     <div class="buttons">
-      <a href="store.html" class="store-btn">Visit Store</a>
-      <a href="products.html" class="product-btn">View Products</a>
+      <a class="store" href="store.html">Visit Store</a>
+      <a class="products" href="products.html">View Products</a>
     </div>
+  </section>
 
-    <img class="illustration" src="homepage-illustration.png" alt="People working, books and sarees in background">
+  <section class="showcase">
+    <img src="softwares.png" alt="Software Billing Demo" />
+    <img src="books.png" alt="Book Store" />
+    <img src="dress.png" alt="Saree Store" />
   </section>
 
   <footer>
@@ -142,7 +154,7 @@
       <a href="contact.html">Contact Us</a> |
       <a href="https://wa.me/917200718055">Get Support</a>
     </div>
-    <br>
+    <br />
     &copy; 2025 HaruTech. All rights reserved.
   </footer>
 

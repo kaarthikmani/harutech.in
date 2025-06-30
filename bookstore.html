@@ -23,13 +23,22 @@
       font-size: 2.4rem;
       margin: 10px 0 10px;
     }
+    header h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    header h3 {
+      font-size: 1rem;
+      font-weight: normal;
+      margin-bottom: 30px;
+    }
 
     .cta-buttons {
       display: flex;
       justify-content: center;
       gap: 20px;
       flex-wrap: wrap;
-      margin-top: 20px;
       margin-bottom: 30px;
     }
     .cta-buttons a {
@@ -39,7 +48,7 @@
       font-weight: bold;
       color: white;
       text-decoration: none;
-      min-width: 140px;
+      min-width: 120px;
     }
     .cta-buttons a:nth-child(1) { background: #00bcd4; } /* Home */
     .cta-buttons a:nth-child(2) { background: #e91e63; } /* Softwares */
@@ -53,18 +62,16 @@
       padding: 40px 20px;
       background: #f6f9fc;
     }
-
     .book-card {
-      flex: 0 1 calc(14.28% - 20px); /* 100/7 = 14.28% */
+      flex: 0 1 calc(14.28% - 20px); /* 7 in a row */
       max-width: 160px;
       background: #fff;
       border-radius: 12px;
-      padding: 15px;
+      padding: 20px 15px;
       text-align: center;
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
       position: relative;
     }
-
     .book-card::before {
       content: attr(data-id);
       position: absolute;
@@ -77,25 +84,25 @@
       padding: 4px 8px;
       border-radius: 0 0 10px 0;
     }
-
     .book-card img {
       width: 100%;
       height: auto;
       border-radius: 8px;
       margin-bottom: 10px;
     }
-
+    .book-card a {
+      text-decoration: none;
+      color: inherit;
+    }
     .book-card h4 {
       font-size: 1rem;
       margin: 5px 0;
       color: #4a00e0;
     }
-
     .book-card p {
       font-size: 0.85rem;
       color: #555;
     }
-
     .buy-button {
       display: inline-block;
       margin-top: 10px;
@@ -107,7 +114,6 @@
       font-size: 0.85rem;
       font-weight: 600;
     }
-
     .buy-button:hover {
       background-color: #3a00b2;
     }
@@ -119,14 +125,22 @@
       font-size: 0.9rem;
       color: #aaa;
     }
-
     footer a {
       color: #aaa;
       text-decoration: none;
       margin: 0 10px;
     }
-
     footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 1200px) {
+      .book-card { flex: 0 1 calc(20% - 20px); }
+    }
+    @media (max-width: 900px) {
+      .book-card { flex: 0 1 calc(33.33% - 20px); }
+    }
+    @media (max-width: 600px) {
+      .book-card { flex: 0 1 calc(50% - 20px); }
+    }
   </style>
 </head>
 <body>
@@ -145,39 +159,36 @@
 
   <section class="book-grid">
     <div class="book-card" data-id="1">
-      <img src="book1.png" alt="Book 1">
-      <h4>Title of Book 1</h4>
+      <a href="book-details.html?id=1">
+        <img src="book1.png" alt="Book 1">
+        <h4>Title of Book 1</h4>
+      </a>
       <p><strong>Author:</strong> Arun Vignesh</p>
       <p><strong>₹</strong> 120</p>
       <a href="#" class="buy-button">Buy Now</a>
     </div>
 
     <div class="book-card" data-id="2">
-      <img src="book2.png" alt="Book 2">
-      <h4>Title of Book 2</h4>
+      <a href="book-details.html?id=2">
+        <img src="book2.png" alt="Book 2">
+        <h4>Title of Book 2</h4>
+      </a>
       <p><strong>Author:</strong> Priya Sinha</p>
       <p><strong>₹</strong> 99</p>
       <a href="#" class="buy-button">Buy Now</a>
     </div>
 
     <div class="book-card" data-id="3">
-      <img src="book3.png" alt="Book 3">
-      <h4>Title of Book 3</h4>
+      <a href="book-details.html?id=3">
+        <img src="book3.png" alt="Book 3">
+        <h4>Title of Book 3</h4>
+      </a>
       <p><strong>Author:</strong> Dhanush Kumar</p>
       <p><strong>₹</strong> 150</p>
       <a href="#" class="buy-button">Buy Now</a>
     </div>
 
-    <!-- You can add more books here like this -->
-    <!--
-    <div class="book-card" data-id="4">
-      <img src="book4.png" alt="Book 4">
-      <h4>Title of Book 4</h4>
-      <p><strong>Author:</strong> Author Name</p>
-      <p><strong>₹</strong> Price</p>
-      <a href="#" class="buy-button">Buy Now</a>
-    </div>
-    -->
+    <!-- Add more book cards here as needed -->
   </section>
 
   <footer>

@@ -124,6 +124,25 @@
 .buy-button:hover {
   background-color: #3a00b2;
 }
+.book-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px 20px;
+  background: #f6f9fc;
+}
+
+.book-card {
+  flex: 0 1 calc(14.28% - 20px); /* 100/7 = 14.28%, minus gap */
+  max-width: 160px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
 
   </style>
 </head>

@@ -1,104 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HaruTech | Creative Studio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Poppins', sans-serif; background: linear-gradient(to right, #4a00e0, #8e2de2); color: #fff; }
-    header { padding: 20px; text-align: center; font-size: 1.5rem; font-weight: 600; }
-
-    .hero {
-      text-align: center;
-      padding: 80px 20px 40px;
+    body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #6a11cb, #2575fc); color: white; text-align: center; }
+    header {
+      padding: 30px 0 10px;
     }
-    .hero h1 {
+    header img {
+      height: 50px;
+    }
+    h1 {
       font-size: 2.5rem;
-      margin-bottom: 20px;
+      margin: 30px 0 10px;
     }
-    .hero p {
-      font-size: 1.1rem;
-      margin-bottom: 40px;
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
     }
-    .hero a {
-      display: inline-block;
-      margin: 10px;
-      padding: 12px 24px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    .btn-store { background-color: #e91e63; color: #fff; }
-    .btn-products { background-color: #2196f3; color: #fff; }
-
-    .cards {
+    .btn-group {
       display: flex;
-      flex-wrap: wrap;
       justify-content: center;
-      padding: 40px 20px;
       gap: 20px;
+      margin-bottom: 50px;
     }
-    .card {
-      background: #fff;
-      color: #333;
-      border-radius: 12px;
-      width: 280px;
-      padding: 20px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-      text-align: center;
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
     }
-    .card h3 { margin-bottom: 10px; color: #4a00e0; }
-    .card p { font-size: 0.95rem; }
-
+    .btn.store { background-color: #ff3d57; color: white; }
+    .btn.products { background-color: #33c5f4; color: white; }
     footer {
-      background: #1a1a1a;
-      padding: 30px;
-      text-align: center;
+      background: #111;
+      padding: 20px;
       font-size: 0.9rem;
-      color: #aaa;
+      color: #ccc;
     }
     footer a {
-      color: #aaa;
+      color: #ccc;
       text-decoration: none;
       margin: 0 10px;
     }
-    footer a:hover { text-decoration: underline; }
+    footer a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
+  <header>
+    <img src="logo.png" alt="HaruTech Logo" />
+  </header>
 
-  <header>HaruTech</header>
-
-  <section class="hero">
+  <main>
     <h1>Discover Our Store and Products</h1>
     <p>For special stories, software, and creative power across India & Cambodia</p>
-    <a href="store.html" class="btn-store">Visit Store</a>
-    <a href="products.html" class="btn-products">View Products</a>
-  </section>
-
-  <section class="cards">
-    <div class="card">
-      <h3>Spring Studio</h3>
-      <p>AI dubbing and voice studio for creators. Make your voice heard.</p>
+    <div class="btn-group">
+      <a href="store.html"><button class="btn store">Visit Store</button></a>
+      <a href="products.html"><button class="btn products">View Products</button></a>
     </div>
-    <div class="card">
-      <h3>Saree of the Month</h3>
-      <p>Explore our handpicked traditional silk saree — exclusively in our store.</p>
-    </div>
-  </section>
+  </main>
 
   <footer>
-    <div>
-      <a href="download.html">Download</a> |
-      <a href="vision.html">Vision</a> |
-      <a href="contact.html">Contact Us</a> |
-      <a href="https://wa.me/917200718055">Get Support</a>
-    </div>
-    <br>
-    &copy; 2025 HaruTech. All rights reserved.
+    <a href="download.html">Download</a> |
+    <a href="vision.html">Vision</a> |
+    <a href="contact.html">Contact Us</a> |
+    <a href="support.html">Get Support</a><br><br>
+    © 2025 HaruTech. All rights reserved.
   </footer>
-
 </body>
 </html>

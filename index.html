@@ -4,79 +4,77 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HaruTech | The New Permanent</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Poppins', sans-serif; background: #fdfcff; color: #333; }
+    body { font-family: 'Poppins', sans-serif; background: #f6f9fc; color: #333; }
 
     header {
-      background: linear-gradient(to right, #8e2de2, #4a00e0);
-      color: white;
-      padding: 30px 20px 10px;
       text-align: center;
+      padding: 50px 20px 20px;
+      background: linear-gradient(to right, #4a00e0, #8e2de2);
+      color: white;
+      position: relative;
     }
-
     header img {
       height: 50px;
+      margin-bottom: 10px;
     }
-
+    header h1 {
+      font-size: 2.4rem;
+      margin: 10px 0 5px;
+    }
     header h2 {
-      margin-top: 10px;
-      font-size: 1.1rem;
-      color: #fff;
-      letter-spacing: 1px;
+      font-size: 1.2rem;
+      font-weight: normal;
+      margin-bottom: 20px;
     }
-
-    .hero {
-      text-align: center;
-      background: linear-gradient(to right, #8e2de2, #4a00e0);
-      color: white;
-      padding: 30px 20px 40px;
+    .auth-buttons {
+      margin-bottom: 20px;
     }
-
-    .hero h1 {
-      font-size: 2rem;
-      margin-bottom: 15px;
-    }
-
-    .hero p {
-      font-size: 1rem;
-      margin-bottom: 25px;
-    }
-
-    .buttons a {
-      display: inline-block;
-      margin: 10px;
-      padding: 10px 20px;
+    .auth-buttons a {
+      margin: 0 10px;
+      padding: 8px 14px;
+      background: white;
+      color: #4a00e0;
+      text-decoration: none;
       border-radius: 6px;
+      font-weight: 600;
+    }
+    .auth-buttons a:hover {
+      background: #eee;
+    }
+    .cta-buttons {
+      margin-bottom: 30px;
+    }
+    .cta-buttons a {
+      margin: 0 10px;
+      padding: 10px 18px;
+      background: #e91e63;
       color: white;
       text-decoration: none;
+      border-radius: 6px;
       font-weight: bold;
     }
-
-    .buttons .store {
-      background-color: #e91e63;
+    .cta-buttons a:nth-child(2) {
+      background: #00bcd4;
+    }
+    .cta-buttons a:nth-child(3) {
+      background: #4caf50;
     }
 
-    .buttons .products {
-      background-color: #00bcd4;
-    }
-
-    .showcase {
+    .preview-section {
       display: flex;
       justify-content: center;
-      flex-wrap: wrap;
-      padding: 40px 20px 60px;
-      background: #f3f6fb;
-      gap: 30px;
+      gap: 20px;
+      padding: 40px 20px;
+      background: #f0f3f8;
     }
-
-    .showcase img {
-      width: 300px;
-      height: 220px;
-      object-fit: cover;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    .preview-section img {
+      width: 280px;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
     footer {
@@ -86,38 +84,38 @@
       font-size: 0.9rem;
       color: #aaa;
     }
-
     footer a {
       color: #aaa;
       text-decoration: none;
       margin: 0 10px;
     }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
+    footer a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
 
   <header>
-    <img src="logo.png" alt="HaruTech Logo" />
-    <h2>The New Permanent</h2>
+    <img src="logo.png" alt="HaruTech Logo">
+    <div>The New Permanent</div>
+    <h1>Discover Our Store and Products</h1>
+    <h2>Buy books, sarees, and software that connect India & Cambodia</h2>
+
+    <div class="auth-buttons">
+      <a href="login.html">Sign In</a>
+      <a href="signup.html">Sign Up</a>
+    </div>
+
+    <div class="cta-buttons">
+      <a href="products.html">Softwares</a>
+      <a href="store.html">Books</a>
+      <a href="store.html">Dresses</a>
+    </div>
   </header>
 
-  <section class="hero">
-    <h1>Discover Our Store and Products</h1>
-    <p>Buy books, sarees, and software that connect India & Cambodia</p>
-    <div class="buttons">
-      <a class="store" href="store.html">Visit Store</a>
-      <a class="products" href="products.html">View Products</a>
-    </div>
-  </section>
-
-  <section class="showcase">
-    <img src="softwares.png" alt="Softwares" />
-    <img src="books.png" alt="Books" />
-    <img src="dress.png" alt="Dresses" />
+  <section class="preview-section">
+    <img src="softwares.jpg" alt="Software Section">
+    <img src="books.jpg" alt="Book Store">
+    <img src="dress.jpg" alt="Saree Store">
   </section>
 
   <footer>
@@ -127,7 +125,8 @@
       <a href="contact.html">Contact Us</a> |
       <a href="https://wa.me/917200718055">Get Support</a>
     </div>
-    <br />
+    <br>
+    CEO: HARU THEAV YUKI<br>
     &copy; 2025 HaruTech. All rights reserved.
   </footer>
 

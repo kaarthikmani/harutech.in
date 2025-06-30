@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Store | HaruTech</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background: #f6f9fc; color: #333; }
+
+    header {
+      text-align: center;
+      padding: 50px 20px 30px;
+      background: linear-gradient(to right, #4a00e0, #8e2de2);
+      color: white;
+    }
+    header img {
+      height: 50px;
+      margin-bottom: 10px;
+    }
+    header h1 {
+      font-size: 2.4rem;
+      margin: 10px 0 10px;
+    }
+    header h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    header h3 {
+      font-size: 1rem;
+      font-weight: normal;
+      margin-bottom: 30px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+    .cta-buttons a {
+      padding: 12px 24px;
+      text-align: center;
+      border-radius: 6px;
+      font-weight: bold;
+      color: white;
+      text-decoration: none;
+      min-width: 140px;
+    }
+    .cta-buttons a:nth-child(1) { background: #00bcd4; } /* Home */
+    .cta-buttons a:nth-child(2) { background: #4caf50; } /* Dresses */
+
+    .book-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 40px 20px;
+    }
+    .book-card {
+      background: #fff;
+      border-radius: 12px;
+      width: 240px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+      padding: 15px;
+      text-align: center;
+      position: relative;
+    }
+    .book-card::before {
+      content: attr(data-id);
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      background: #4a00e0;
+      color: white;
+      font-size: 0.8rem;
+      font-weight: bold;
+      padding: 4px 8px;
+      border-radius: 0 0 10px 0;
+    }
+    .book-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .book-card h4 {
+      font-size: 1rem;
+      margin: 5px 0;
+      color: #4a00e0;
+    }
+    .book-card p {
+      font-size: 0.85rem;
+      color: #555;
+    }
+
+    footer {
+      background: #1a1a1a;
+      padding: 30px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+    footer a {
+      color: #aaa;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="logo.png" alt="HaruTech Logo">
+    <div>The New Permanent</div>
+    <h1>OUR BOOK STORE</h1>
+    <h2>Read the stories that unite India & Cambodia</h2>
+    <h3>Each book is handcrafted by emotion, culture, and technology</h3>
+
+    <div class="cta-buttons">
+      <a href="index.html">Home</a>
+      <a href="store.html">Dresses</a>
+    </div>
+  </header>
+
+  <section class="book-grid">
+    <div class="book-card" data-id="1">
+      <img src="book1.png" alt="Book 1">
+      <h4>Title of Book 1</h4>
+      <p>Short description about book 1. This helps user get an idea.</p>
+    </div>
+    <div class="book-card" data-id="2">
+      <img src="book2.png" alt="Book 2">
+      <h4>Title of Book 2</h4>
+      <p>Short description about book 2. This helps user get an idea.</p>
+    </div>
+    <div class="book-card" data-id="3">
+      <img src="book3.png" alt="Book 3">
+      <h4>Title of Book 3</h4>
+      <p>Short description about book 3. This helps user get an idea.</p>
+    </div>
+    <!-- Add more books as needed -->
+  </section>
+
+  <footer>
+    <div>
+      <a href="

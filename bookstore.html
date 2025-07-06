@@ -14,7 +14,9 @@
       padding: 50px 20px 30px;
       background: linear-gradient(to right, #4a00e0, #8e2de2);
       color: white;
+      position: relative;
     }
+
     header img {
       height: 50px;
       margin-bottom: 10px;
@@ -53,6 +55,16 @@
     .cta-buttons a:nth-child(1) { background: #00bcd4; } /* Home */
     .cta-buttons a:nth-child(2) { background: #e91e63; } /* Softwares */
     .cta-buttons a:nth-child(3) { background: #4caf50; } /* Dresses */
+
+    #currencySelector {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: none;
+      font-size: 0.9rem;
+    }
 
     .book-grid {
       display: flex;
@@ -155,6 +167,13 @@
       <a href="products.html">Softwares</a>
       <a href="store.html">Dresses</a>
     </div>
+
+    <!-- Currency Selector -->
+    <select id="currencySelector" onchange="updateCurrency()">
+      <option value="INR">₹ INR</option>
+      <option value="USD">$ USD</option>
+      <option value="KHR">៛ KHR</option>
+    </select>
   </header>
 
   <section class="book-grid">
@@ -164,7 +183,7 @@
         <h4>Title of Book 1</h4>
       </a>
       <p><strong>Author:</strong> Arun Vignesh</p>
-      <p><strong>₹</strong> 120</p>
+      <p class="price" data-price="120">₹120</p>
       <a href="#" class="buy-button">Buy Now</a>
     </div>
 
@@ -174,7 +193,7 @@
         <h4>Title of Book 2</h4>
       </a>
       <p><strong>Author:</strong> Priya Sinha</p>
-      <p><strong>₹</strong> 99</p>
+      <p class="price" data-price="99">₹99</p>
       <a href="#" class="buy-button">Buy Now</a>
     </div>
 
@@ -184,11 +203,9 @@
         <h4>Title of Book 3</h4>
       </a>
       <p><strong>Author:</strong> Dhanush Kumar</p>
-      <p><strong>₹</strong> 150</p>
+      <p class="price" data-price="150">₹150</p>
       <a href="#" class="buy-button">Buy Now</a>
     </div>
-
-    <!-- Add more book cards here as needed -->
   </section>
 
   <footer>
@@ -196,19 +213,40 @@
       <a href="download.html">Download</a> |
       <a href="vision.html">Vision</a> |
       <a href="contact.html">Contact Us</a> 
-      
     </div>
     <br>
     CEO: Haru Theav Yuki<br>
     &copy; 2025 HaruTech. All rights reserved.
   </footer>
-<!-- Flag Counter -->
-<div style="text-align: center; margin-top: 15px;">
-  <a href="https://info.flagcounter.com/j4Dh">
-    <img src="https://s01.flagcounter.com/count2/j4Dh/bg_FFFFFF/txt_000000/border_CCCCCC/columns_2/maxflags_10/viewers_0/labels_0/pageviews_0/flags_0/percent_0/" alt="Flag Counter" border="0">
-  </a>
-</div>
 
+  <!-- Flag Counter -->
+  <div style="text-align: center; margin-top: 15px;">
+    <a href="https://info.flagcounter.com/j4Dh">
+      <img src="https://s01.flagcounter.com/count2/j4Dh/bg_FFFFFF/txt_000000/border_CCCCCC/columns_2/maxflags_10/viewers_0/labels_0/pageviews_0/flags_0/percent_0/" alt="Flag Counter" border="0">
+    </a>
+  </div>
 
+  <!-- Currency Conversion Script -->
+  <script>
+    const exchangeRates = {
+      INR: 1,
+      USD: 0.012,  // Replace with real-time values if needed
+      KHR: 50      // Replace with real-time values if needed
+    };
+
+    function updateCurrency() {
+      const currency = document.getElementById("currencySelector").value;
+      const prices = document.querySelectorAll(".price");
+
+      prices.forEach(p => {
+        const base = parseFloat(p.getAttribute("data-price"));
+        const converted = base * exchangeRates[currency];
+        const symbol = currency === "INR" ? "₹" : currency === "USD" ? "$" : "៛";
+        p.innerText = symbol + converted.toFixed(2);
+      });
+    }
+
+    window.onload = () => updateCurrency();
+  </script>
 </body>
 </html>

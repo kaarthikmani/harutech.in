@@ -170,6 +170,39 @@
     alert("Added to cart: " + title);
   }
 </script>
+<script>
+  const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvfkGr1hd4NJK-jylkCAdVx8WDd9jw1aFXU4QSHWExNgAMOLfKAoNZ-93022FBBf_yBOLxEFMm1ffa/pub?gid=0&single=true&output=csv";
+
+  async function fetchBooks() {
+    const response = await fetch(sheetURL);
+    const data = await response.text();
+    const rows = data.split("\n").slice(1); // remove header
+
+    const grid = document.querySelector(".book-grid");
+    grid.innerHTML = ""; // Clear existing cards
+
+    rows.forEach(row => {
+      const cols = row.split(",");
+      if (cols.length < 7) return;
+
+      const [id, title, author, price, imageURL, type, buyURL] = cols;
+
+      grid.innerHTML += `
+        <div class="book-card" data-id="${id}">
+          <a href="${buyURL}" target="_blank">
+            <img src="${imageURL.trim()}" alt="${title}">
+            <h4>${title}</h4>
+          </a>
+          <p><strong>Author:</strong> ${author}</p>
+          <p><strong>₹</strong> ${price}</p>
+          <a href="${buyURL}" class="buy-button" target="_blank">Buy Now</a>
+        </div>
+      `;
+    });
+  }
+
+  window.onload = fetchBooks;
+</script>
 
 <body>
 
@@ -192,31 +225,7 @@
     <a href="cart.html" id="cartLink">🛒 Cart</a>
   </header>
 
-  <section class="book-grid">
-    <div class="book-card" data-id="1">
-      <img src="Naththai_Manithan_Cover_front.png" alt="Book 1">
-      <h4>நத்தை மனிதன்</h4>
-      <p><strong>Author:</strong> கார்த்திகேயன் மணி </p>
-      <p class="price" data-price="120">₹120</p>
-      <button class="buy-button" onclick="addToCart('நத்தை மனிதன்', 120)">Add to Cart</button>
-    </div>
-
-    <div class="book-card" data-id="2">
-      <img src="book2.png" alt="Book 2">
-      <h4>Shadow King</h4>
-      <p><strong>Author:</strong> Priya Sinha</p>
-      <p class="price" data-price="99">₹99</p>
-      <button class="buy-button" onclick="addToCart('Shadow King', 99)">Add to Cart</button>
-    </div>
-
-    <div class="book-card" data-id="3">
-      <img src="book3.png" alt="Book 3">
-      <h4>Glass Saints</h4>
-      <p><strong>Author:</strong> Dhanush Kumar</p>
-      <p class="price" data-price="150">₹150</p>
-      <button class="buy-button" onclick="addToCart('Glass Saints', 150)">Add to Cart</button>
-    </div>
-  </section>
+  
 
   <footer>
     <div>

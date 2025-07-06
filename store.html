@@ -14,6 +14,7 @@
       padding: 50px 20px 30px;
       background: linear-gradient(to right, #4a00e0, #8e2de2);
       color: white;
+      position: relative;
     }
 
     header img {
@@ -50,9 +51,10 @@
       min-width: 140px;
     }
 
-    .cta-buttons a:nth-child(1) { background: #e91e63; }
-    .cta-buttons a:nth-child(2) { background: #00bcd4; }
-    .cta-buttons a:nth-child(3) { background: #4caf50; }
+    .cta-buttons a:nth-child(1) { background: #ff9800; }
+    .cta-buttons a:nth-child(2) { background: #e91e63; }
+    .cta-buttons a:nth-child(3) { background: #00bcd4; }
+    .cta-buttons a:nth-child(4) { background: #4caf50; }
 
     .products {
       display: flex;
@@ -107,6 +109,12 @@
     footer a:hover {
       text-decoration: underline;
     }
+
+    .currency-selector {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
   </style>
 </head>
 <body>
@@ -117,10 +125,17 @@
   <h2>Books and Sarees for the Soul</h2>
 
   <div class="cta-buttons">
-    <a href="index.html" style="background:#ff9800;">Home</a>
+    <a href="index.html">Home</a>
     <a href="bookstore.html">Books</a>
     <a href="store.html">Dresses</a>
     <a href="products.html">Softwares</a>
+  </div>
+  <div class="currency-selector">
+    <select id="currencySelector" onchange="updateCurrency()">
+      <option value="INR">₹ INR</option>
+      <option value="USD">$ USD</option>
+      <option value="KHR">៛ KHR</option>
+    </select>
   </div>
 </header>
 
@@ -128,22 +143,22 @@
   <div class="card">
     <img src="images/book1.jpg" alt="Pidari Book">
     <h3>Pidari (English)</h3>
-    <p>₹199</p>
+    <p class="price" data-price="199">₹199</p>
   </div>
   <div class="card">
     <img src="images/book2.jpg" alt="Shadow King">
     <h3>Shadow King</h3>
-    <p>₹149</p>
+    <p class="price" data-price="149">₹149</p>
   </div>
   <div class="card">
     <img src="images/saree1.jpg" alt="Silk Saree">
     <h3>Traditional Silk Saree</h3>
-    <p>₹899</p>
+    <p class="price" data-price="899">₹899</p>
   </div>
   <div class="card">
     <img src="images/saree2.jpg" alt="Cotton Saree">
     <h3>Handwoven Cotton Saree</h3>
-    <p>₹749</p>
+    <p class="price" data-price="749">₹749</p>
   </div>
 </section>
 
@@ -164,7 +179,27 @@
   </a>
 </div>
 
-<!-- Force redeploy -->
+<script>
+  const exchangeRates = {
+    INR: 1,
+    USD: 0.012,
+    KHR: 50
+  };
+
+  function updateCurrency() {
+    const currency = document.getElementById("currencySelector").value;
+    const prices = document.querySelectorAll(".price");
+
+    prices.forEach(p => {
+      const basePrice = parseFloat(p.getAttribute("data-price"));
+      const converted = basePrice * exchangeRates[currency];
+      let symbol = currency === "INR" ? "₹" : (currency === "USD" ? "$" : "៛");
+      p.innerText = symbol + converted.toFixed(2);
+    });
+  }
+
+  window.onload = () => updateCurrency();
+</script>
 
 </body>
 </html>

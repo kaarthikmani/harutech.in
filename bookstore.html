@@ -25,16 +25,6 @@
       font-size: 2.4rem;
       margin: 10px 0 10px;
     }
-    header h2 {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 5px;
-    }
-    header h3 {
-      font-size: 1rem;
-      font-weight: normal;
-      margin-bottom: 30px;
-    }
 
     .cta-buttons {
       display: flex;
@@ -162,48 +152,6 @@
     }
   </style>
 </head>
-  <script>
-  function addToCart(title, price) {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    cart.push({ title, price });
-    localStorage.setItem("cart", JSON.stringify(cart));
-    alert("Added to cart: " + title);
-  }
-</script>
-<script>
-  const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvfkGr1hd4NJK-jylkCAdVx8WDd9jw1aFXU4QSHWExNgAMOLfKAoNZ-93022FBBf_yBOLxEFMm1ffa/pub?gid=0&single=true&output=csv";
-
-  async function fetchBooks() {
-    const response = await fetch(sheetURL);
-    const data = await response.text();
-    const rows = data.split("\n").slice(1); // remove header
-
-    const grid = document.querySelector(".book-grid");
-    grid.innerHTML = ""; // Clear existing cards
-
-    rows.forEach(row => {
-      const cols = row.split(",");
-      if (cols.length < 7) return;
-
-      const [id, title, author, price, imageURL, type, buyURL] = cols;
-
-      grid.innerHTML += `
-        <div class="book-card" data-id="${id}">
-          <a href="${buyURL}" target="_blank">
-            <img src="${imageURL.trim()}" alt="${title}">
-            <h4>${title}</h4>
-          </a>
-          <p><strong>Author:</strong> ${author}</p>
-          <p><strong>₹</strong> ${price}</p>
-          <a href="${buyURL}" class="buy-button" target="_blank">Buy Now</a>
-        </div>
-      `;
-    });
-  }
-
-  window.onload = fetchBooks;
-</script>
-
 <body>
 
   <header>
@@ -225,7 +173,8 @@
     <a href="cart.html" id="cartLink">🛒 Cart</a>
   </header>
 
-  
+  <!-- BOOK GRID CONTAINER -->
+  <section class="book-grid"></section>
 
   <footer>
     <div>
@@ -245,7 +194,7 @@
     </a>
   </div>
 
-  <!-- Scripts -->
+  <!-- SCRIPTS -->
   <script>
     const exchangeRates = {
       INR: 1,
@@ -272,7 +221,37 @@
       alert(`${title} added to cart`);
     }
 
-    window.onload = () => updateCurrency();
+    const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvfkGr1hd4NJK-jylkCAdVx8WDd9jw1aFXU4QSHWExNgAMOLfKAoNZ-93022FBBf_yBOLxEFMm1ffa/pub?gid=0&single=true&output=csv";
+
+    async function fetchBooks() {
+      const response = await fetch(sheetURL);
+      const data = await response.text();
+      const rows = data.split("\n").slice(1); // skip header
+
+      const grid = document.querySelector(".book-grid");
+      grid.innerHTML = "";
+
+      rows.forEach(row => {
+        const cols = row.split(",");
+        if (cols.length < 7) return;
+
+        const [id, title, author, price, imageURL, type, buyURL] = cols;
+
+        grid.innerHTML += `
+          <div class="book-card" data-id="${id}">
+            <img src="${imageURL.trim()}" alt="${title}">
+            <h4>${title}</h4>
+            <p><strong>Author:</strong> ${author}</p>
+            <p class="price" data-price="${price}">₹${price}</p>
+            <button class="buy-button" onclick="addToCart('${title}', ${price})">Add to Cart</button>
+          </div>
+        `;
+      });
+
+      updateCurrency(); // Apply selected currency after loading
+    }
+
+    window.onload = fetchBooks;
   </script>
 
 </body>

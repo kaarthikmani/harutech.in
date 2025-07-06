@@ -1,46 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Harubooks Store | HaruTech</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Store | HaruTech</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Poppins', sans-serif; background: #fdfcff; color: #333; }
+    body { font-family: 'Poppins', sans-serif; background: #f6f9fc; color: #333; }
 
     header {
-      background: linear-gradient(to right, #8e2de2, #4a00e0);
+      text-align: center;
+      padding: 50px 20px 30px;
+      background: linear-gradient(to right, #4a00e0, #8e2de2);
       color: white;
-      padding: 20px;
     }
 
-    .topbar {
+    header img {
+      height: 50px;
+      margin-bottom: 10px;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+    }
+
+    header h2 {
+      font-size: 1rem;
+      font-weight: normal;
+      margin-bottom: 25px;
+    }
+
+    .cta-buttons {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
     }
 
-    .topbar h1 {
-      font-size: 1.5rem;
-    }
-
-    .topbar nav a {
+    .cta-buttons a {
+      padding: 12px 24px;
+      text-align: center;
+      border-radius: 6px;
+      font-weight: bold;
       color: white;
       text-decoration: none;
-      margin-left: 20px;
-      font-weight: 500;
+      min-width: 140px;
     }
 
-    .topbar nav a:hover {
-      text-decoration: underline;
-    }
-
-    .subtitle {
-      text-align: center;
-      margin-top: 10px;
-      font-size: 1rem;
-    }
+    .cta-buttons a:nth-child(1) { background: #e91e63; }
+    .cta-buttons a:nth-child(2) { background: #00bcd4; }
+    .cta-buttons a:nth-child(3) { background: #4caf50; }
 
     .products {
       display: flex;
@@ -51,7 +63,7 @@
     }
 
     .card {
-      background: #fff;
+      background: white;
       border-radius: 12px;
       width: 250px;
       padding: 20px;
@@ -78,17 +90,6 @@
       color: #27ae60;
     }
 
-    .card a {
-      display: inline-block;
-      margin-top: 12px;
-      padding: 8px 14px;
-      background-color: #e91e63;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 6px;
-      font-weight: bold;
-    }
-
     footer {
       background: #1a1a1a;
       padding: 30px;
@@ -110,63 +111,57 @@
 </head>
 <body>
 
-  <header>
-    <div class="topbar">
-      <h1>Book Store</h1>
-      <nav>
-        <a href="index.html">Home</a>
-        <a href="store.html">Store</a>
-        <a href="products.html">Products</a>
-        <a href="login.html">Login</a>
-      </nav>
-    </div>
-    <p class="subtitle">Books and Sarees for the soul</p>
-  </header>
+<header>
+  <img src="logo.png" alt="HaruTech Logo">
+  <h1>HARUBOOKS STORE</h1>
+  <h2>Books and Sarees for the Soul</h2>
 
-  <section class="products">
-    <div class="card">
-      <img src="images/book1.jpg" alt="Pidari Book">
-      <h3>Pidari (English)</h3>
-      <p>₹199</p>
-      <a href="https://wa.me/917200718055?text=I want to buy Pidari book">Buy on WhatsApp</a>
-    </div>
-    <div class="card">
-      <img src="images/book2.jpg" alt="Shadow King">
-      <h3>Shadow King</h3>
-      <p>₹149</p>
-      <a href="https://wa.me/917200718055?text=I want to buy Shadow King">Buy on WhatsApp</a>
-    </div>
-    <div class="card">
-      <img src="images/saree1.jpg" alt="Silk Saree">
-      <h3>Traditional Silk Saree</h3>
-      <p>₹899</p>
-      <a href="https://wa.me/917200718055?text=I want to buy Traditional Silk Saree">Buy on WhatsApp</a>
-    </div>
-    <div class="card">
-      <img src="images/saree2.jpg" alt="Handwoven Cotton Saree">
-      <h3>Handwoven Cotton Saree</h3>
-      <p>₹749</p>
-      <a href="https://wa.me/917200718055?text=I want to buy Handwoven Cotton Saree">Buy on WhatsApp</a>
-    </div>
-  </section>
+  <div class="cta-buttons">
+    <a href="bookstore.html">Books</a>
+    <a href="store.html">Dresses</a>
+    <a href="products.html">Softwares</a>
+  </div>
+</header>
 
-  <footer>
-    <div>
-      <a href="download.html">Download</a> |
-      <a href="vision.html">Vision</a> |
-      <a href="contact.html">Contact Us</a> 
-      
-    </div>
-    <br>
-    &copy; 2025 HaruTech. All rights reserved.
-  </footer>
+<section class="products">
+  <div class="card">
+    <img src="images/book1.jpg" alt="Pidari Book">
+    <h3>Pidari (English)</h3>
+    <p>₹199</p>
+  </div>
+  <div class="card">
+    <img src="images/book2.jpg" alt="Shadow King">
+    <h3>Shadow King</h3>
+    <p>₹149</p>
+  </div>
+  <div class="card">
+    <img src="images/saree1.jpg" alt="Silk Saree">
+    <h3>Traditional Silk Saree</h3>
+    <p>₹899</p>
+  </div>
+  <div class="card">
+    <img src="images/saree2.jpg" alt="Cotton Saree">
+    <h3>Handwoven Cotton Saree</h3>
+    <p>₹749</p>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <a href="download.html">Download</a> |
+    <a href="vision.html">Vision</a> |
+    <a href="contact.html">Contact Us</a>
+  </div>
+  <br>
+  &copy; 2025 HaruTech. All rights reserved.
+</footer>
+
 <!-- Flag Counter -->
 <div style="text-align: center; margin-top: 15px;">
   <a href="https://info.flagcounter.com/j4Dh">
     <img src="https://s01.flagcounter.com/count2/j4Dh/bg_FFFFFF/txt_000000/border_CCCCCC/columns_2/maxflags_10/viewers_0/labels_0/pageviews_0/flags_0/percent_0/" alt="Flag Counter" border="0">
   </a>
 </div>
-
 
 </body>
 </html>

@@ -235,7 +235,9 @@
   const cols = row.split(",");
   if (cols.length < 7) return;
 
-  const [id, title, author, price, imageURL, type, buyURL] = cols;
+  const clean = cols.map(col => col.replace(/^"|"$/g, '').trim());
+const [id, title, author, price, imageURL, type, buyURL] = clean;
+
 
   const trimmedBuyURL = buyURL?.trim();
 

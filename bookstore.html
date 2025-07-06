@@ -52,18 +52,27 @@
       text-decoration: none;
       min-width: 120px;
     }
-    .cta-buttons a:nth-child(1) { background: #00bcd4; } /* Home */
-    .cta-buttons a:nth-child(2) { background: #e91e63; } /* Softwares */
-    .cta-buttons a:nth-child(3) { background: #4caf50; } /* Dresses */
+    .cta-buttons a:nth-child(1) { background: #00bcd4; }
+    .cta-buttons a:nth-child(2) { background: #e91e63; }
+    .cta-buttons a:nth-child(3) { background: #4caf50; }
 
     #currencySelector {
       position: absolute;
       top: 20px;
-      right: 20px;
+      right: 130px;
       padding: 6px 10px;
       border-radius: 6px;
       border: none;
       font-size: 0.9rem;
+    }
+
+    #cartLink {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
     }
 
     .book-grid {
@@ -75,7 +84,7 @@
       background: #f6f9fc;
     }
     .book-card {
-      flex: 0 1 calc(14.28% - 20px); /* 7 in a row */
+      flex: 0 1 calc(14.28% - 20px);
       max-width: 160px;
       background: #fff;
       border-radius: 12px;
@@ -102,10 +111,6 @@
       border-radius: 8px;
       margin-bottom: 10px;
     }
-    .book-card a {
-      text-decoration: none;
-      color: inherit;
-    }
     .book-card h4 {
       font-size: 1rem;
       margin: 5px 0;
@@ -122,9 +127,11 @@
       background-color: #4a00e0;
       color: white;
       text-decoration: none;
+      border: none;
       border-radius: 6px;
       font-size: 0.85rem;
       font-weight: 600;
+      cursor: pointer;
     }
     .buy-button:hover {
       background-color: #3a00b2;
@@ -168,43 +175,37 @@
       <a href="store.html">Dresses</a>
     </div>
 
-    <!-- Currency Selector -->
     <select id="currencySelector" onchange="updateCurrency()">
       <option value="INR">₹ INR</option>
       <option value="USD">$ USD</option>
       <option value="KHR">៛ KHR</option>
     </select>
+    <a href="cart.html" id="cartLink">🛒 Cart</a>
   </header>
 
   <section class="book-grid">
     <div class="book-card" data-id="1">
-      <a href="book-details.html?id=1">
-        <img src="book1.png" alt="Book 1">
-        <h4>Title of Book 1</h4>
-      </a>
+      <img src="book1.png" alt="Book 1">
+      <h4>நத்தை மனிதன்</h4>
       <p><strong>Author:</strong> Arun Vignesh</p>
       <p class="price" data-price="120">₹120</p>
-      <a href="#" class="buy-button">Buy Now</a>
+      <button class="buy-button" onclick="addToCart('நத்தை மனிதன்', 120)">Add to Cart</button>
     </div>
 
     <div class="book-card" data-id="2">
-      <a href="book-details.html?id=2">
-        <img src="book2.png" alt="Book 2">
-        <h4>Title of Book 2</h4>
-      </a>
+      <img src="book2.png" alt="Book 2">
+      <h4>Shadow King</h4>
       <p><strong>Author:</strong> Priya Sinha</p>
       <p class="price" data-price="99">₹99</p>
-      <a href="#" class="buy-button">Buy Now</a>
+      <button class="buy-button" onclick="addToCart('Shadow King', 99)">Add to Cart</button>
     </div>
 
     <div class="book-card" data-id="3">
-      <a href="book-details.html?id=3">
-        <img src="book3.png" alt="Book 3">
-        <h4>Title of Book 3</h4>
-      </a>
+      <img src="book3.png" alt="Book 3">
+      <h4>Glass Saints</h4>
       <p><strong>Author:</strong> Dhanush Kumar</p>
       <p class="price" data-price="150">₹150</p>
-      <a href="#" class="buy-button">Buy Now</a>
+      <button class="buy-button" onclick="addToCart('Glass Saints', 150)">Add to Cart</button>
     </div>
   </section>
 
@@ -226,12 +227,12 @@
     </a>
   </div>
 
-  <!-- Currency Conversion Script -->
+  <!-- Scripts -->
   <script>
     const exchangeRates = {
       INR: 1,
-      USD: 0.012,  // Replace with real-time values if needed
-      KHR: 50      // Replace with real-time values if needed
+      USD: 0.012,
+      KHR: 50
     };
 
     function updateCurrency() {
@@ -246,7 +247,15 @@
       });
     }
 
+    function addToCart(title, price) {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart.push({ title, price });
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert(`${title} added to cart`);
+    }
+
     window.onload = () => updateCurrency();
   </script>
+
 </body>
 </html>

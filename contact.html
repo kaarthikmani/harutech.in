@@ -128,12 +128,26 @@
   <p><strong>📧 Email:</strong> info.harubooks@gmail.com</p>
 
   <form action="https://formspree.io/f/xwpbjrvy" method="POST">
+  <p>
+    <input type="text" name="name" placeholder="Your Name" required
+      style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc;">
+  </p>
+  <p>
+    <input type="email" name="email" placeholder="Your Email" required
+      style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc;">
+  </p>
+  <p>
+    <textarea name="message" placeholder="Your Message" required
+      style="width:100%; padding:10px; height:120px; border-radius:5px; border:1px solid #ccc;"></textarea>
+  </p>
+  <p>
+    <button type="submit"
+      style="background:#0d1e3f; color:white; padding:10px 20px; border:none; border-radius:5px; font-weight:bold;">
+      Send Message
+    </button>
+  </p>
+</form>
 
-    <input type="text" name="name" placeholder="Your Name" required />
-    <input type="email" name="email" placeholder="Your Email" required />
-    <textarea name="message" placeholder="Your Message" rows="6" required></textarea>
-    <button type="submit">Send Message</button>
-  </form>
 </section>
 
 <footer>

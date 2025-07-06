@@ -232,21 +232,26 @@
       grid.innerHTML = "";
 
       rows.forEach(row => {
-        const cols = row.split(",");
-        if (cols.length < 7) return;
+  const cols = row.split(",");
+  if (cols.length < 7) return;
 
-        const [id, title, author, price, imageURL, type, buyURL] = cols;
+  const [id, title, author, price, imageURL, type, buyURL] = cols;
 
-        grid.innerHTML += `
-          <div class="book-card" data-id="${id}">
-            <img src="${imageURL.trim()}" alt="${title}">
-            <h4>${title}</h4>
-            <p><strong>Author:</strong> ${author}</p>
-            <p class="price" data-price="${price}">₹${price}</p>
-            <button class="buy-button" onclick="addToCart('${title}', ${price})">Add to Cart</button>
-          </div>
-        `;
-      });
+  const trimmedBuyURL = buyURL?.trim();
+
+  grid.innerHTML += `
+    <div class="book-card" data-id="${id}">
+      <img src="${imageURL.trim()}" alt="${title}">
+      <h4>${title}</h4>
+      <p><strong>Author:</strong> ${author}</p>
+      <p class="price" data-price="${price}">₹${price}</p>
+      ${trimmedBuyURL
+        ? `<a href="${trimmedBuyURL}" class="buy-button" target="_blank">Buy Now</a>`
+        : `<button class="buy-button" onclick="addToCart('${title}', ${price})">Add to Cart</button>`}
+    </div>
+  `;
+});
+
 
       updateCurrency(); // Apply selected currency after loading
     }

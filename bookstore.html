@@ -185,21 +185,24 @@
   </div>
 
   <!-- SECTIONS -->
-  <h2 class="section-title">eBooks</h2>
+  <h2 class="section-title">📘 eBooks</h2>
   <section class="book-grid" id="ebooksSection"></section>
 
-  <h2 class="section-title">Paperbacks</h2>
+  <h2 class="section-title">📗 Paperbacks</h2>
   <section class="book-grid" id="paperbacksSection"></section>
 
   <footer>
     <div>
       <a href="download.html">Download</a> |
       <a href="vision.html">Vision</a> |
-      <a href="contact.html">Contact Us</a> 
+      <a href="contact.html">Contact Us</a>
     </div>
     <br>
     CEO: Haru Theav Yuki<br>
     &copy; 2025 HaruTech. All rights reserved.
+    <br><br>
+    <!-- Flag Counter -->
+    <a href="https://info.flagcounter.com/yourcode"><img src="https://s11.flagcounter.com/count2/yourcode/bg_FFFFFF/txt_000000/border_CCCCCC/columns_6/maxflags_12/viewers_3/labels_1/pageviews_1/flags_1/" alt="Flag Counter"></a>
   </footer>
 
   <script>
@@ -231,51 +234,50 @@
     const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvfkGr1hd4NJK-jylkCAdVx8WDd9jw1aFXU4QSHWExNgAMOLfKAoNZ-93022FBBf_yBOLxEFMm1ffa/pub?gid=0&single=true&output=csv";
 
     async function fetchBooks() {
-  const response = await fetch(sheetURL);
-  const data = await response.text();
-  const parsed = Papa.parse(data, { header: true }).data;
+      const response = await fetch(sheetURL);
+      const data = await response.text();
+      const parsed = Papa.parse(data, { header: true }).data;
 
-  const ebooksSection = document.getElementById("ebooksSection");
-  const paperbacksSection = document.getElementById("paperbacksSection");
-  ebooksSection.innerHTML = "";
-  paperbacksSection.innerHTML = "";
+      const ebooksSection = document.getElementById("ebooksSection");
+      const paperbacksSection = document.getElementById("paperbacksSection");
+      ebooksSection.innerHTML = "";
+      paperbacksSection.innerHTML = "";
 
-  parsed.forEach(row => {
-    const {
-      ID: id,
-      Title: title,
-      Author: author,
-      Price: price,
-      ImageURL: imageURL,
-      Type: type,
-      BuyURL: buyURL
-    } = row;
+      parsed.forEach(row => {
+        const {
+          ID: id,
+          Title: title,
+          Author: author,
+          Price: price,
+          ImageURL: imageURL,
+          Type: type,
+          BuyURL: buyURL
+        } = row;
 
-    if (!id || !title) return;
+        if (!id || !title) return;
 
-    const trimmedBuyURL = buyURL?.trim();
-    const cardHTML = `
-      <div class="book-card" data-id="${id}">
-        <img src="${imageURL}" alt="${title}">
-        <h4>${title}</h4>
-        <p><strong>Author:</strong> ${author}</p>
-        <p class="price" data-price="${price}">₹${price}</p>
-        ${trimmedBuyURL
-          ? `<a href="${trimmedBuyURL}" class="buy-button" target="_blank">Read Now</a>`
-          : `<button class="buy-button" onclick="addToCart('${title}', ${price})">Add to Cart</button>`}
-      </div>
-    `;
+        const trimmedBuyURL = buyURL?.trim();
+        const cardHTML = `
+          <div class="book-card" data-id="${id}">
+            <img src="${imageURL}" alt="${title}">
+            <h4>${title}</h4>
+            <p><strong>Author:</strong> ${author}</p>
+            <p class="price" data-price="${price}">₹${price}</p>
+            ${trimmedBuyURL
+              ? `<a href="${trimmedBuyURL}" class="buy-button" target="_blank">Read Now</a>`
+              : `<button class="buy-button" onclick="addToCart('${title}', ${price})">Add to Cart</button>`}
+          </div>
+        `;
 
-    if (type.toLowerCase() === "ebook") {
-      ebooksSection.innerHTML += cardHTML;
-    } else if (type.toLowerCase() === "paperback") {
-      paperbacksSection.innerHTML += cardHTML;
+        if (type.toLowerCase() === "ebook") {
+          ebooksSection.innerHTML += cardHTML;
+        } else if (type.toLowerCase() === "paperback") {
+          paperbacksSection.innerHTML += cardHTML;
+        }
+      });
+
+      updateCurrency();
     }
-  });
-
-  updateCurrency();
-}
-
 
     window.onload = fetchBooks;
   </script>

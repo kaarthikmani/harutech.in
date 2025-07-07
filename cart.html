@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Your Cart | HaruTech</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -68,6 +68,8 @@
       margin-top: 30px;
       display: flex;
       justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
     }
     .btns button, .btns a {
       padding: 10px 20px;
@@ -83,6 +85,10 @@
     }
     .btns .back-btn {
       background: #4caf50;
+      color: white;
+    }
+    .btns .checkout-btn {
+      background: #4a00e0;
       color: white;
     }
   </style>
@@ -117,7 +123,7 @@
       let html = "";
       let total = 0;
 
-      cart.forEach((item, i) => {
+      cart.forEach(item => {
         const converted = item.price * exchangeRates[currency];
         total += converted;
         html += `
@@ -134,6 +140,7 @@
         <div class="btns">
           <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
           <a href="bookstore.html" class="back-btn">← Back to Store</a>
+          <a href="pay.html" class="checkout-btn">Proceed to Pay →</a>
         </div>
       `;
 

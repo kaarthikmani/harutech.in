@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Payment | HaruTech</title>
+  <title>Your Cart | HaruTech</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
@@ -18,124 +18,179 @@
       color: white;
       padding: 20px;
       text-align: center;
+      position: relative;
     }
-    .container {
-      max-width: 700px;
+    .back-btn {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #4caf50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .cart-container {
+      max-width: 800px;
       margin: 30px auto;
       background: white;
       border-radius: 12px;
       padding: 30px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    h2 {
-      color: #4a00e0;
+    .cart-breakdown {
       margin-bottom: 20px;
-      text-align: center;
     }
-    .info-line {
-      margin-bottom: 10px;
-      font-size: 1rem;
+    .cart-item-line {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
     }
-    .qr-image {
-      display: block;
-      max-width: 300px;
-      margin: 20px auto;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    .cart-item-line:last-child {
+      border-bottom: none;
     }
-    .note {
-      background: #fff3cd;
-      color: #856404;
-      padding: 12px;
-      border-radius: 8px;
-      margin-top: 20px;
-      text-align: center;
-      font-weight: bold;
-    }
-    .total {
-      text-align: right;
-      margin-top: 20px;
+    .total-line {
       font-weight: bold;
       font-size: 1.1rem;
       color: #4a00e0;
+      text-align: right;
+      margin-top: 10px;
     }
-    .footer {
-      text-align: center;
-      font-size: 0.9rem;
-      color: #777;
-      margin-top: 40px;
+    .delivery-form input,
+    .delivery-form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-family: 'Poppins', sans-serif;
+    }
+    .delivery-form label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .btns {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .clear-btn {
+      background: #e91e63;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .pay-btn {
+      background: #4a00e0;
+      color: white;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      display: block;
+      margin: 40px auto 0;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Proceed to Payment</h1>
+    <a href="bookstore.html" class="back-btn">← Back to Store</a>
+    <h1>Your Cart</h1>
   </header>
 
-  <div class="container" id="paymentDetails">
-    <!-- Payment info will load here -->
+  <div class="cart-container">
+    <div id="cartDetails" class="cart-breakdown"></div>
+
+    <div class="delivery-form">
+      <label for="name">Name</label>
+      <input type="text" id="name" required>
+
+      <label for="mobile">Mobile Number</label>
+      <input type="text" id="mobile" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" required>
+
+      <label for="address">Address</label>
+      <textarea id="address" rows="3" required></textarea>
+    </div>
+
+    <div class="btns">
+      <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
+    </div>
+
+    <button class="pay-btn" onclick="submitOrder()">Proceed to Pay →</button>
   </div>
 
   <script>
-    const exchangeRates = { INR: 1, USD: 0.012, KHR: 50 };
-    const qrImages = {
-      INR: 'Rupees.jpg',
-      USD: 'Dollars.jpg',
-      KHR: 'Riel.jpg'
+    const exchangeRates = {
+      INR: 1,
+      USD: 0.012,
+      KHR: 50
     };
-    const symbolMap = { INR: "₹", USD: "$", KHR: "៛" };
 
-    function loadPaymentDetails() {
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
-      const userInfo = JSON.parse(localStorage.getItem("userInfo")) || {};
+    function updateCartDisplay() {
       const currency = localStorage.getItem("selectedCurrency") || "INR";
+      const symbol = currency === "INR" ? "₹" : currency === "USD" ? "$" : "៛";
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-      const symbol = symbolMap[currency];
-      const rate = exchangeRates[currency];
-      const qrImage = qrImages[currency];
+      let html = "";
+      let total = 0;
+      let deliveryCharges = 0;
 
-      let itemTotal = 0;
-      let itemListHTML = "";
-
-      cart.forEach(item => {
-        itemTotal += item.price;
-        itemListHTML += `<div class="info-line">${item.title} — ${symbol}${(item.price * rate).toFixed(2)}</div>`;
+      cart.forEach((item) => {
+        html += `<div class="cart-item-line"><span>${item.title}</span><span>${symbol}${item.price.toFixed(2)}</span></div>`;
+        total += item.price;
       });
 
-      let delivery = 0;
-      let deliveryText = "";
-
-      if (currency === "INR") {
-        if (cart.length > 5) {
-          deliveryText = "✅ Free delivery for more than 5 books inside India.";
-        } else {
-          delivery = cart.length * 50;
-          deliveryText = `₹50 per book × ${cart.length} = ₹${delivery}`;
-        }
-      } else {
-        deliveryText = "📦 Delivery charges will be informed via WhatsApp within 48 hrs.";
+      if (currency === "INR" && cart.length > 0 && cart.length <= 5) {
+        deliveryCharges = cart.length * 50;
+        html += `<div class="cart-item-line"><span>Delivery Charges</span><span>${symbol}${deliveryCharges.toFixed(2)}</span></div>`;
       }
 
-      const grandTotal = (itemTotal * rate) + (currency === "INR" && cart.length <= 5 ? delivery : 0);
+      const grandTotal = total + (currency === "INR" ? deliveryCharges : 0);
 
-      document.getElementById("paymentDetails").innerHTML = `
-        <h2>Order Summary</h2>
-        <div class="info-line"><strong>Name:</strong> ${userInfo.name || "-"}</div>
-        <div class="info-line"><strong>Mobile:</strong> ${userInfo.mobile || "-"}</div>
-        <div class="info-line"><strong>Email:</strong> ${userInfo.email || "-"}</div>
-        <div class="info-line"><strong>Address:</strong> ${userInfo.address || "-"}</div>
-        <hr style="margin:20px 0;">
-        ${itemListHTML}
-        <div class="info-line"><strong>Delivery:</strong> ${deliveryText}</div>
-        <div class="total">Total Payable: ${symbol}${grandTotal.toFixed(2)}</div>
-        <img class="qr-image" src="${qrImage}" alt="QR Code for ${currency}">
-        <div class="note">Scan the QR above and complete your payment. Once paid, send screenshot to WhatsApp: +91 98409 67484</div>
-        <div class="footer">© 2025 HaruTech Store</div>
-      `;
+      html += `<div class="total-line">Total: ${symbol}${grandTotal.toFixed(2)}</div>`;
+
+      document.getElementById("cartDetails").innerHTML = html;
     }
 
-    loadPaymentDetails();
+    function clearCart() {
+      localStorage.removeItem("cart");
+      updateCartDisplay();
+      alert("Cart cleared.");
+    }
+
+    function submitOrder() {
+      const name = document.getElementById("name").value.trim();
+      const mobile = document.getElementById("mobile").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const address = document.getElementById("address").value.trim();
+      const currency = localStorage.getItem("selectedCurrency") || "INR";
+
+      if (!name || !mobile || !email || !address) {
+        alert("Please fill all the fields before proceeding.");
+        return;
+      }
+
+      const userInfo = { name, mobile, email, address, currency };
+      localStorage.setItem("userInfo", JSON.stringify(userInfo));
+
+      window.location.href = "pay.html";
+    }
+
+    window.onload = updateCartDisplay;
   </script>
 
 </body>

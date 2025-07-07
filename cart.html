@@ -3,135 +3,140 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Your Cart | HaruTech</title>
+  <title>Payment | HaruTech</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Poppins', sans-serif; background: #f6f9fc; margin: 0; padding: 0; color: #333; }
-    header { background: linear-gradient(to right, #4a00e0, #8e2de2); color: white; padding: 20px; text-align: center; position: relative; }
-    .back-btn { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); background: #4caf50; color: white; padding: 10px 20px; border: none; border-radius: 6px; font-weight: bold; text-decoration: none; }
-    .cart-container { max-width: 800px; margin: 30px auto; background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    .cart-item-line { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
-    .total-line { font-weight: bold; font-size: 1.1rem; color: #4a00e0; text-align: right; margin-top: 10px; }
-    .delivery-form input, .delivery-form textarea { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; font-family: 'Poppins', sans-serif; }
-    .delivery-form label { font-weight: bold; display: block; margin-bottom: 6px; }
-    .clear-btn { background: #e91e63; color: white; padding: 10px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
-    .pay-btn { background: #4a00e0; color: white; padding: 12px 30px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; display: block; margin: 40px auto 0; }
-    .qr-code { text-align: center; margin-top: 20px; }
-    .note { font-size: 0.9rem; text-align: center; margin-top: 10px; color: #444; }
-    select { width: 100%; padding: 10px; border-radius: 6px; margin-bottom: 20px; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f6f9fc;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    header {
+      background: linear-gradient(to right, #4a00e0, #8e2de2);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .container {
+      max-width: 700px;
+      margin: 30px auto;
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #4a00e0;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .info-line {
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+    .qr-image {
+      display: block;
+      max-width: 300px;
+      margin: 20px auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .note {
+      background: #fff3cd;
+      color: #856404;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 20px;
+      text-align: center;
+      font-weight: bold;
+    }
+    .total {
+      text-align: right;
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #4a00e0;
+    }
+    .footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #777;
+      margin-top: 40px;
+    }
   </style>
 </head>
 <body>
+
   <header>
-    <a href="bookstore.html" class="back-btn">← Back to Store</a>
-    <h1>Your Cart</h1>
+    <h1>Proceed to Payment</h1>
   </header>
 
-  <div class="cart-container">
-    <div id="cartDetails"></div>
-
-    <div class="delivery-form">
-      <label for="currency">Select Currency</label>
-      <select id="currency" onchange="updateCartDisplay()">
-        <option value="INR">INR</option>
-        <option value="USD">USD</option>
-        <option value="KHR">KHR</option>
-      </select>
-
-      <label for="name">Name</label>
-      <input type="text" id="name" required>
-
-      <label for="mobile">Mobile Number</label>
-      <input type="text" id="mobile" required>
-
-      <label for="email">Email</label>
-      <input type="email" id="email" required>
-
-      <label for="address">Address</label>
-      <textarea id="address" rows="3" required></textarea>
-    </div>
-
-    <div class="qr-code" id="qrCode"></div>
-    <div class="note" id="deliveryNote"></div>
-
-    <div style="text-align:center; margin-top: 20px;">
-      <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
-    </div>
-
-    <button class="pay-btn" onclick="submitOrder()">Proceed to Pay →</button>
+  <div class="container" id="paymentDetails">
+    <!-- Payment info will load here -->
   </div>
 
   <script>
-    const endpoint = "https://script.google.com/macros/s/AKfycbyK3Bto2RJc7To5SRlv_OWfejGNpM-1XWZMNEu4CsxE6HsPV8rnNps3jVUWNagi5DFmmQ/exec";
     const exchangeRates = { INR: 1, USD: 0.012, KHR: 50 };
+    const qrImages = {
+      INR: 'Rupees.jpg',
+      USD: 'Dollars.jpg',
+      KHR: 'Riel.jpg'
+    };
+    const symbolMap = { INR: "₹", USD: "$", KHR: "៛" };
 
-    function updateCartDisplay() {
-      const currency = document.getElementById("currency").value;
-      const symbol = currency === "INR" ? "₹" : currency === "USD" ? "$" : "៛";
+    function loadPaymentDetails() {
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const userInfo = JSON.parse(localStorage.getItem("userInfo")) || {};
+      const currency = localStorage.getItem("selectedCurrency") || "INR";
 
-      let html = "", total = 0, deliveryCharges = 0;
+      const symbol = symbolMap[currency];
+      const rate = exchangeRates[currency];
+      const qrImage = qrImages[currency];
+
+      let itemTotal = 0;
+      let itemListHTML = "";
+
       cart.forEach(item => {
-        html += `<div class="cart-item-line"><span>${item.title}</span><span>${symbol}${item.price.toFixed(2)}</span></div>`;
-        total += item.price;
+        itemTotal += item.price;
+        itemListHTML += `<div class="info-line">${item.title} — ${symbol}${(item.price * rate).toFixed(2)}</div>`;
       });
+
+      let delivery = 0;
+      let deliveryText = "";
 
       if (currency === "INR") {
-        if (cart.length > 0 && cart.length <= 5) {
-          deliveryCharges = cart.length * 50;
-          html += `<div class="cart-item-line"><span>Delivery Charges</span><span>${symbol}${deliveryCharges.toFixed(2)}</span></div>`;
-        } else if (cart.length > 5) {
-          html += `<div class="cart-item-line"><span>Delivery Charges</span><span>FREE</span></div>`;
+        if (cart.length > 5) {
+          deliveryText = "✅ Free delivery for more than 5 books inside India.";
+        } else {
+          delivery = cart.length * 50;
+          deliveryText = `₹50 per book × ${cart.length} = ₹${delivery}`;
         }
       } else {
-        document.getElementById("deliveryNote").innerText = "Delivery charges for international orders will be informed within 48 hours via WhatsApp (+91 98409 67484).";
+        deliveryText = "📦 Delivery charges will be informed via WhatsApp within 48 hrs.";
       }
 
-      const grandTotal = total + deliveryCharges;
-      html += `<div class="total-line">Total: ${symbol}${grandTotal.toFixed(2)}</div>`;
-      document.getElementById("cartDetails").innerHTML = html;
+      const grandTotal = (itemTotal * rate) + (currency === "INR" && cart.length <= 5 ? delivery : 0);
 
-      const qrImg = currency === "INR" ? "Rupees.jpg" : currency === "USD" ? "Dollars.jpg" : "Riel.jpg";
-      document.getElementById("qrCode").innerHTML = `<img src="${qrImg}" alt="Payment QR Code" style="max-width:200px;">`;
+      document.getElementById("paymentDetails").innerHTML = `
+        <h2>Order Summary</h2>
+        <div class="info-line"><strong>Name:</strong> ${userInfo.name || "-"}</div>
+        <div class="info-line"><strong>Mobile:</strong> ${userInfo.mobile || "-"}</div>
+        <div class="info-line"><strong>Email:</strong> ${userInfo.email || "-"}</div>
+        <div class="info-line"><strong>Address:</strong> ${userInfo.address || "-"}</div>
+        <hr style="margin:20px 0;">
+        ${itemListHTML}
+        <div class="info-line"><strong>Delivery:</strong> ${deliveryText}</div>
+        <div class="total">Total Payable: ${symbol}${grandTotal.toFixed(2)}</div>
+        <img class="qr-image" src="${qrImage}" alt="QR Code for ${currency}">
+        <div class="note">Scan the QR above and complete your payment. Once paid, send screenshot to WhatsApp: +91 98409 67484</div>
+        <div class="footer">© 2025 HaruTech Store</div>
+      `;
     }
 
-    function clearCart() {
-      localStorage.removeItem("cart");
-      updateCartDisplay();
-      alert("Cart cleared.");
-    }
-
-    function submitOrder() {
-      const name = document.getElementById("name").value;
-      const mobile = document.getElementById("mobile").value;
-      const email = document.getElementById("email").value;
-      const address = document.getElementById("address").value;
-      const currency = document.getElementById("currency").value;
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-      if (!name || !mobile || !email || !address || cart.length === 0) {
-        alert("Please fill all fields and add books to cart.");
-        return;
-      }
-
-      const payload = {
-        name, mobile, email, address, currency,
-        order: cart.map(i => `${i.title} - ${i.price}`).join(" | ")
-      };
-
-      fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      }).then(() => {
-        alert("Order submitted successfully! You can now proceed with payment.");
-        clearCart();
-      }).catch(() => {
-        alert("Failed to submit order. Please try again.");
-      });
-    }
-
-    window.onload = updateCartDisplay;
+    loadPaymentDetails();
   </script>
+
 </body>
 </html>

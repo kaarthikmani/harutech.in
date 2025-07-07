@@ -6,113 +6,38 @@
   <title>Your Cart | HaruTech</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #f6f9fc;
-      margin: 0;
-      padding: 0;
-      color: #333;
-    }
-    header {
-      background: linear-gradient(to right, #4a00e0, #8e2de2);
-      color: white;
-      padding: 20px;
-      text-align: center;
-      position: relative;
-    }
-    .back-btn {
-      position: absolute;
-      left: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: #4caf50;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      text-decoration: none;
-    }
-    .cart-container {
-      max-width: 800px;
-      margin: 30px auto;
-      background: white;
-      border-radius: 12px;
-      padding: 30px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .cart-breakdown {
-      margin-bottom: 20px;
-    }
-    .cart-item-line {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px solid #eee;
-    }
-    .cart-item-line:last-child {
-      border-bottom: none;
-    }
-    .total-line {
-      font-weight: bold;
-      font-size: 1.1rem;
-      color: #4a00e0;
-      text-align: right;
-      margin-top: 10px;
-    }
-    .delivery-form input,
-    .delivery-form textarea {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-family: 'Poppins', sans-serif;
-    }
-    .delivery-form label {
-      font-weight: bold;
-      display: block;
-      margin-bottom: 6px;
-    }
-    .btns {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
-      flex-wrap: wrap;
-    }
-    .clear-btn {
-      background: #e91e63;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .pay-btn {
-      background: #4a00e0;
-      color: white;
-      padding: 12px 30px;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-      display: block;
-      margin: 40px auto 0;
-    }
+    body { font-family: 'Poppins', sans-serif; background: #f6f9fc; margin: 0; padding: 0; color: #333; }
+    header { background: linear-gradient(to right, #4a00e0, #8e2de2); color: white; padding: 20px; text-align: center; position: relative; }
+    .back-btn { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); background: #4caf50; color: white; padding: 10px 20px; border: none; border-radius: 6px; font-weight: bold; text-decoration: none; }
+    .cart-container { max-width: 800px; margin: 30px auto; background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .cart-item-line { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+    .total-line { font-weight: bold; font-size: 1.1rem; color: #4a00e0; text-align: right; margin-top: 10px; }
+    .delivery-form input, .delivery-form textarea { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; font-family: 'Poppins', sans-serif; }
+    .delivery-form label { font-weight: bold; display: block; margin-bottom: 6px; }
+    .clear-btn { background: #e91e63; color: white; padding: 10px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    .pay-btn { background: #4a00e0; color: white; padding: 12px 30px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; display: block; margin: 40px auto 0; }
+    .qr-code { text-align: center; margin-top: 20px; }
+    .note { font-size: 0.9rem; text-align: center; margin-top: 10px; color: #444; }
+    select { width: 100%; padding: 10px; border-radius: 6px; margin-bottom: 20px; }
   </style>
 </head>
 <body>
-
   <header>
     <a href="bookstore.html" class="back-btn">← Back to Store</a>
     <h1>Your Cart</h1>
   </header>
 
   <div class="cart-container">
-    <div id="cartDetails" class="cart-breakdown"></div>
+    <div id="cartDetails"></div>
 
     <div class="delivery-form">
+      <label for="currency">Select Currency</label>
+      <select id="currency" onchange="updateCartDisplay()">
+        <option value="INR">INR</option>
+        <option value="USD">USD</option>
+        <option value="KHR">KHR</option>
+      </select>
+
       <label for="name">Name</label>
       <input type="text" id="name" required>
 
@@ -126,7 +51,10 @@
       <textarea id="address" rows="3" required></textarea>
     </div>
 
-    <div class="btns">
+    <div class="qr-code" id="qrCode"></div>
+    <div class="note" id="deliveryNote"></div>
+
+    <div style="text-align:center; margin-top: 20px;">
       <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
     </div>
 
@@ -134,35 +62,37 @@
   </div>
 
   <script>
-    const exchangeRates = {
-      INR: 1,
-      USD: 0.012,
-      KHR: 50
-    };
+    const endpoint = "https://script.google.com/macros/s/AKfycbyK3Bto2RJc7To5SRlv_OWfejGNpM-1XWZMNEu4CsxE6HsPV8rnNps3jVUWNagi5DFmmQ/exec";
+    const exchangeRates = { INR: 1, USD: 0.012, KHR: 50 };
 
     function updateCartDisplay() {
-      const currency = "INR";
+      const currency = document.getElementById("currency").value;
       const symbol = currency === "INR" ? "₹" : currency === "USD" ? "$" : "៛";
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-      let html = "";
-      let total = 0;
-      let deliveryCharges = 0;
-
-      cart.forEach((item, i) => {
+      let html = "", total = 0, deliveryCharges = 0;
+      cart.forEach(item => {
         html += `<div class="cart-item-line"><span>${item.title}</span><span>${symbol}${item.price.toFixed(2)}</span></div>`;
         total += item.price;
       });
 
-      if (cart.length > 0 && cart.length <= 5) {
-        deliveryCharges = cart.length * 50;
-        html += `<div class="cart-item-line"><span>Delivery Charges</span><span>${symbol}${deliveryCharges.toFixed(2)}</span></div>`;
+      if (currency === "INR") {
+        if (cart.length > 0 && cart.length <= 5) {
+          deliveryCharges = cart.length * 50;
+          html += `<div class="cart-item-line"><span>Delivery Charges</span><span>${symbol}${deliveryCharges.toFixed(2)}</span></div>`;
+        } else if (cart.length > 5) {
+          html += `<div class="cart-item-line"><span>Delivery Charges</span><span>FREE</span></div>`;
+        }
+      } else {
+        document.getElementById("deliveryNote").innerText = "Delivery charges for international orders will be informed within 48 hours via WhatsApp (+91 98409 67484).";
       }
 
       const grandTotal = total + deliveryCharges;
       html += `<div class="total-line">Total: ${symbol}${grandTotal.toFixed(2)}</div>`;
-
       document.getElementById("cartDetails").innerHTML = html;
+
+      const qrImg = currency === "INR" ? "Rupees.jpg" : currency === "USD" ? "Dollars.jpg" : "Riel.jpg";
+      document.getElementById("qrCode").innerHTML = `<img src="${qrImg}" alt="Payment QR Code" style="max-width:200px;">`;
     }
 
     function clearCart() {
@@ -172,11 +102,36 @@
     }
 
     function submitOrder() {
-      alert("Payment integration coming soon. This button will connect to payment and Google Sheet.");
+      const name = document.getElementById("name").value;
+      const mobile = document.getElementById("mobile").value;
+      const email = document.getElementById("email").value;
+      const address = document.getElementById("address").value;
+      const currency = document.getElementById("currency").value;
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      if (!name || !mobile || !email || !address || cart.length === 0) {
+        alert("Please fill all fields and add books to cart.");
+        return;
+      }
+
+      const payload = {
+        name, mobile, email, address, currency,
+        order: cart.map(i => `${i.title} - ${i.price}`).join(" | ")
+      };
+
+      fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      }).then(() => {
+        alert("Order submitted successfully! You can now proceed with payment.");
+        clearCart();
+      }).catch(() => {
+        alert("Failed to submit order. Please try again.");
+      });
     }
 
     window.onload = updateCartDisplay;
   </script>
-
 </body>
 </html>

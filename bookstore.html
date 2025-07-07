@@ -124,6 +124,14 @@
       background-color: #3a00b2;
     }
 
+    .info-banner {
+      background: #fff3cd;
+      padding: 12px;
+      text-align: center;
+      font-weight: bold;
+      color: #856404;
+    }
+
     footer {
       background: #1a1a1a;
       padding: 30px;
@@ -169,6 +177,10 @@
     </select>
     <a href="cart.html" id="cartLink">🛒 Cart</a>
   </header>
+
+  <div class="info-banner">
+    🛒 Click the Cart button on the top right to checkout after adding books.
+  </div>
 
   <!-- SECTIONS -->
   <h2 class="section-title">eBooks</h2>
@@ -227,21 +239,19 @@
       paperbacksSection.innerHTML = "";
 
       rows.forEach(row => {
-        const cols = row.split(",");
-        if (cols.length < 7) return;
+        const cols = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+        if (!cols || cols.length < 7) return;
 
-        const clean = cols.map(col => col.replace(/^"|"$/g, '').trim());
-        const [id, title, author, price, imageURL, type, buyURL] = clean;
+        const [id, title, author, price, imageURL, type, buyURL] = cols.map(c => c.replace(/^"|"$/g, '').trim());
 
-        const trimmedBuyURL = buyURL?.trim();
         const cardHTML = `
           <div class="book-card" data-id="${id}">
             <img src="${imageURL}" alt="${title}">
             <h4>${title}</h4>
             <p><strong>Author:</strong> ${author}</p>
             <p class="price" data-price="${price}">₹${price}</p>
-            ${trimmedBuyURL
-              ? `<a href="${trimmedBuyURL}" class="buy-button" target="_blank">Buy Now</a>`
+            ${buyURL
+              ? `<a href="${buyURL}" class="buy-button" target="_blank">${type.toLowerCase() === 'ebook' ? 'Read Now' : 'Buy Now'}</a>`
               : `<button class="buy-button" onclick="addToCart('${title}', ${price})">Add to Cart</button>`}
           </div>
         `;

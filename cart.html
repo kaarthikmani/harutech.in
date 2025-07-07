@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Your Cart | HaruTech</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -19,6 +19,9 @@
       padding: 20px;
       text-align: center;
     }
+    header h1 {
+      margin: 10px 0;
+    }
     .cart-container {
       max-width: 800px;
       margin: 30px auto;
@@ -27,24 +30,28 @@
       padding: 30px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    .cart-item {
+    .cart-breakdown {
+      margin-bottom: 20px;
+    }
+    .cart-item-line {
       display: flex;
       justify-content: space-between;
-      padding: 10px 0;
+      padding: 8px 0;
       border-bottom: 1px solid #eee;
     }
-    .total {
-      text-align: right;
-      font-size: 1.2rem;
-      color: #4a00e0;
+    .cart-item-line:last-child {
+      border-bottom: none;
+    }
+    .total-line {
       font-weight: bold;
+      font-size: 1.1rem;
+      color: #4a00e0;
+      margin-top: 10px;
     }
     .btns {
-      margin-top: 30px;
       display: flex;
       justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 10px;
+      margin-top: 30px;
     }
     .btns button, .btns a {
       padding: 10px 20px;
@@ -54,74 +61,101 @@
       cursor: pointer;
       text-decoration: none;
     }
-    .clear-btn { background: #e91e63; color: white; }
-    .back-btn { background: #4caf50; color: white; }
-    .pay-btn { background: #4a00e0; color: white; }
-
-    form {
+    .clear-btn {
+      background: #e91e63;
+      color: white;
+    }
+    .back-btn {
+      background: #4caf50;
+      color: white;
+    }
+    .pay-btn {
+      background: #4a00e0;
+      color: white;
+    }
+    .delivery-form {
       margin-top: 30px;
     }
-    form input, form textarea {
+    .delivery-form input,
+    .delivery-form textarea {
       width: 100%;
       padding: 10px;
-      margin: 10px 0;
+      margin-bottom: 15px;
       border: 1px solid #ccc;
       border-radius: 6px;
-      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+    }
+    .delivery-form label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 6px;
     }
   </style>
 </head>
 <body>
+
   <header>
     <h1>Your Cart</h1>
   </header>
 
-  <div class="cart-container" id="cartList"></div>
+  <div class="cart-container">
+    <div id="cartDetails" class="cart-breakdown"></div>
+
+    <div class="delivery-form">
+      <label for="name">Name</label>
+      <input type="text" id="name" required>
+
+      <label for="mobile">Mobile Number</label>
+      <input type="text" id="mobile" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" required>
+
+      <label for="address">Address</label>
+      <textarea id="address" rows="3" required></textarea>
+    </div>
+
+    <div class="btns">
+      <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
+      <a href="bookstore.html" class="back-btn">← Back to Store</a>
+    </div>
+
+    <div class="btns" style="justify-content: flex-end; margin-top: 20px;">
+      <button class="pay-btn" onclick="submitOrder()">Proceed to Pay →</button>
+    </div>
+  </div>
 
   <script>
-    const exchangeRates = { INR: 1, USD: 0.012, KHR: 50 };
-    const currency = localStorage.getItem("currency") || "INR";
+    const exchangeRates = {
+      INR: 1,
+      USD: 0.012,
+      KHR: 50
+    };
 
     function updateCartDisplay() {
+      const currency = "INR";
       const symbol = currency === "INR" ? "₹" : currency === "USD" ? "$" : "៛";
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
       let html = "";
-      let totalBooks = cart.length;
       let total = 0;
+      let deliveryCharges = 0;
 
-      cart.forEach(item => {
-        const converted = item.price * exchangeRates[currency];
-        total += converted;
-        html += `<div class="cart-item"><h3>${item.title}</h3><p>${symbol}${converted.toFixed(2)}</p></div>`;
+      cart.forEach((item, i) => {
+        html += `<div class="cart-item-line"><span>${item.title}</span><span>${symbol}${item.price.toFixed(2)}</span></div>`;
+        total += item.price;
       });
 
-      // Delivery Charges logic
-      let delivery = 0;
-      if (currency === "INR") {
-        delivery = totalBooks > 5 ? 0 : totalBooks * 50;
-        total += delivery;
+      if (cart.length > 0 && cart.length <= 5) {
+        deliveryCharges = cart.length * 50;
+        html += `<div class="cart-item-line"><span>Delivery Charges</span><span>${symbol}${deliveryCharges.toFixed(2)}</span></div>`;
       }
 
-      html += `<div class="total">Total: ${symbol}${total.toFixed(2)}${delivery > 0 ? ` (including ₹50 x ${totalBooks} delivery)` : delivery === 0 && currency === 'INR' ? ` (Free delivery)` : ``}</div>`;
+      const grandTotal = total + deliveryCharges;
 
-      html += `
-        <div class="btns">
-          <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
-          <a href="bookstore.html" class="back-btn">← Back to Store</a>
-          <a href="payment.html" class="pay-btn">Proceed to Pay →</a>
-        </div>
+      html += `<div class="total-line">Total: ${symbol}${grandTotal.toFixed(2)}</div>`;
 
-        <form>
-          <h3>Delivery Details</h3>
-          <input type="text" placeholder="Your Name" required>
-          <input type="tel" placeholder="Mobile Number" required>
-          <input type="email" placeholder="Email Address" required>
-          <textarea rows="4" placeholder="Full Address" required></textarea>
-        </form>
-      `;
-
-      document.getElementById("cartList").innerHTML = html;
+      document.getElementById("cartDetails").innerHTML = html;
     }
 
     function clearCart() {
@@ -130,7 +164,12 @@
       alert("Cart cleared.");
     }
 
+    function submitOrder() {
+      alert("Payment integration coming soon. This button will connect to payment and Google Sheet.");
+    }
+
     window.onload = updateCartDisplay;
   </script>
+
 </body>
 </html>

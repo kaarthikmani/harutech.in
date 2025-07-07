@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Your Cart | HaruTech</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -18,9 +18,20 @@
       color: white;
       padding: 20px;
       text-align: center;
+      position: relative;
     }
-    header h1 {
-      margin: 10px 0;
+    .back-btn {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #4caf50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      text-decoration: none;
     }
     .cart-container {
       max-width: 800px;
@@ -31,7 +42,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     .cart-breakdown {
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
     .cart-item-line {
       display: flex;
@@ -46,15 +57,8 @@
       font-weight: bold;
       font-size: 1.1rem;
       color: #4a00e0;
+      text-align: right;
       margin-top: 10px;
-    }
-    .delivery-form {
-      margin-top: 30px;
-    }
-    .delivery-form label {
-      font-weight: bold;
-      margin-bottom: 5px;
-      display: block;
     }
     .delivery-form input,
     .delivery-form textarea {
@@ -65,63 +69,45 @@
       border-radius: 6px;
       font-family: 'Poppins', sans-serif;
     }
-    .btns-top {
+    .delivery-form label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .btns {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 30px;
-    }
-    .btns-bottom {
-      text-align: center;
-      margin-top: 30px;
+      margin-top: 20px;
+      flex-wrap: wrap;
     }
     .clear-btn {
-      background-color: #e91e63;
+      background: #e91e63;
       color: white;
       padding: 10px 20px;
-      border-radius: 6px;
       border: none;
+      border-radius: 6px;
       font-weight: bold;
       cursor: pointer;
-    }
-    .back-btn {
-      background-color: #4caf50;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
     }
     .pay-btn {
-      background-color: #4a00e0;
+      background: #4a00e0;
       color: white;
-      padding: 14px 30px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      border-radius: 8px;
+      padding: 12px 30px;
       border: none;
+      border-radius: 6px;
+      font-weight: bold;
       cursor: pointer;
-      width: 100%;
-      max-width: 300px;
+      display: block;
+      margin: 40px auto 0;
     }
   </style>
 </head>
 <body>
 
   <header>
+    <a href="bookstore.html" class="back-btn">← Back to Store</a>
     <h1>Your Cart</h1>
   </header>
-
-  <div style="max-width: 800px; margin: 20px auto 0; padding-left: 20px;">
-    <a href="bookstore.html" class="back-btn" style="
-      background-color: #4caf50;
-      color: white;
-      padding: 8px 16px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-      display: inline-block;
-    ">← Back to Store</a>
-  </div>
 
   <div class="cart-container">
     <div id="cartDetails" class="cart-breakdown"></div>
@@ -140,13 +126,11 @@
       <textarea id="address" rows="3" required></textarea>
     </div>
 
-    <div class="btns-top">
+    <div class="btns">
       <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
     </div>
 
-    <div class="btns-bottom">
-      <button class="pay-btn" onclick="submitOrder()">Proceed to Pay →</button>
-    </div>
+    <button class="pay-btn" onclick="submitOrder()">Proceed to Pay →</button>
   </div>
 
   <script>
@@ -176,6 +160,7 @@
       }
 
       const grandTotal = total + deliveryCharges;
+
       html += `<div class="total-line">Total: ${symbol}${grandTotal.toFixed(2)}</div>`;
 
       document.getElementById("cartDetails").innerHTML = html;
@@ -196,4 +181,3 @@
 
 </body>
 </html>
-

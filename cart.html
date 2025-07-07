@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Cart | HaruTech</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -18,19 +18,6 @@
       color: white;
       padding: 20px;
       text-align: center;
-      position: relative;
-    }
-    header h1 {
-      margin: 10px 0;
-    }
-    #currencySelector {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      padding: 6px 10px;
-      border-radius: 6px;
-      border: none;
-      font-size: 0.9rem;
     }
     .cart-container {
       max-width: 800px;
@@ -46,21 +33,9 @@
       padding: 10px 0;
       border-bottom: 1px solid #eee;
     }
-    .cart-item:last-child {
-      border-bottom: none;
-    }
-    .cart-item h3 {
-      margin: 0;
-      font-size: 1rem;
-    }
-    .cart-item p {
-      margin: 0;
-      font-weight: bold;
-    }
     .total {
       text-align: right;
       font-size: 1.2rem;
-      margin-top: 20px;
       color: #4a00e0;
       font-weight: bold;
     }
@@ -79,69 +54,71 @@
       cursor: pointer;
       text-decoration: none;
     }
-    .btns .clear-btn {
-      background: #e91e63;
-      color: white;
+    .clear-btn { background: #e91e63; color: white; }
+    .back-btn { background: #4caf50; color: white; }
+    .pay-btn { background: #4a00e0; color: white; }
+
+    form {
+      margin-top: 30px;
     }
-    .btns .back-btn {
-      background: #4caf50;
-      color: white;
-    }
-    .btns .checkout-btn {
-      background: #4a00e0;
-      color: white;
+    form input, form textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
     }
   </style>
 </head>
 <body>
-
   <header>
     <h1>Your Cart</h1>
-    <select id="currencySelector" onchange="updateCartDisplay()">
-      <option value="INR">₹ INR</option>
-      <option value="USD">$ USD</option>
-      <option value="KHR">៛ KHR</option>
-    </select>
   </header>
 
-  <div class="cart-container" id="cartList">
-    <!-- Cart items will be injected here -->
-  </div>
+  <div class="cart-container" id="cartList"></div>
 
   <script>
-    const exchangeRates = {
-      INR: 1,
-      USD: 0.012,
-      KHR: 50
-    };
+    const exchangeRates = { INR: 1, USD: 0.012, KHR: 50 };
+    const currency = localStorage.getItem("currency") || "INR";
 
     function updateCartDisplay() {
-      const currency = document.getElementById("currencySelector").value;
       const symbol = currency === "INR" ? "₹" : currency === "USD" ? "$" : "៛";
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
       let html = "";
+      let totalBooks = cart.length;
       let total = 0;
 
       cart.forEach(item => {
         const converted = item.price * exchangeRates[currency];
         total += converted;
-        html += `
-          <div class="cart-item">
-            <h3>${item.title}</h3>
-            <p>${symbol}${converted.toFixed(2)}</p>
-          </div>
-        `;
+        html += `<div class="cart-item"><h3>${item.title}</h3><p>${symbol}${converted.toFixed(2)}</p></div>`;
       });
 
-      html += `<div class="total">Total: ${symbol}${total.toFixed(2)}</div>`;
+      // Delivery Charges logic
+      let delivery = 0;
+      if (currency === "INR") {
+        delivery = totalBooks > 5 ? 0 : totalBooks * 50;
+        total += delivery;
+      }
+
+      html += `<div class="total">Total: ${symbol}${total.toFixed(2)}${delivery > 0 ? ` (including ₹50 x ${totalBooks} delivery)` : delivery === 0 && currency === 'INR' ? ` (Free delivery)` : ``}</div>`;
 
       html += `
         <div class="btns">
           <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
           <a href="bookstore.html" class="back-btn">← Back to Store</a>
-          <a href="pay.html" class="checkout-btn">Proceed to Pay →</a>
+          <a href="payment.html" class="pay-btn">Proceed to Pay →</a>
         </div>
+
+        <form>
+          <h3>Delivery Details</h3>
+          <input type="text" placeholder="Your Name" required>
+          <input type="tel" placeholder="Mobile Number" required>
+          <input type="email" placeholder="Email Address" required>
+          <textarea rows="4" placeholder="Full Address" required></textarea>
+        </form>
       `;
 
       document.getElementById("cartList").innerHTML = html;
@@ -155,6 +132,5 @@
 
     window.onload = updateCartDisplay;
   </script>
-
 </body>
 </html>

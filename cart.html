@@ -31,7 +31,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     .cart-breakdown {
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
     .cart-item-line {
       display: flex;
@@ -48,33 +48,13 @@
       color: #4a00e0;
       margin-top: 10px;
     }
-    .btns {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 30px;
-    }
-    .btns button, .btns a {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-      text-decoration: none;
-    }
-    .clear-btn {
-      background: #e91e63;
-      color: white;
-    }
-    .back-btn {
-      background: #4caf50;
-      color: white;
-    }
-    .pay-btn {
-      background: #4a00e0;
-      color: white;
-    }
     .delivery-form {
       margin-top: 30px;
+    }
+    .delivery-form label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      display: block;
     }
     .delivery-form input,
     .delivery-form textarea {
@@ -85,10 +65,43 @@
       border-radius: 6px;
       font-family: 'Poppins', sans-serif;
     }
-    .delivery-form label {
+    .btns-top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+    .btns-bottom {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .clear-btn {
+      background-color: #e91e63;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      border: none;
       font-weight: bold;
-      display: block;
-      margin-bottom: 6px;
+      cursor: pointer;
+    }
+    .back-btn {
+      background-color: #4caf50;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .pay-btn {
+      background-color: #4a00e0;
+      color: white;
+      padding: 14px 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      max-width: 300px;
     }
   </style>
 </head>
@@ -115,12 +128,12 @@
       <textarea id="address" rows="3" required></textarea>
     </div>
 
-    <div class="btns">
+    <div class="btns-top">
       <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
       <a href="bookstore.html" class="back-btn">← Back to Store</a>
     </div>
 
-    <div class="btns" style="justify-content: flex-end; margin-top: 20px;">
+    <div class="btns-bottom">
       <button class="pay-btn" onclick="submitOrder()">Proceed to Pay →</button>
     </div>
   </div>
@@ -152,7 +165,6 @@
       }
 
       const grandTotal = total + deliveryCharges;
-
       html += `<div class="total-line">Total: ${symbol}${grandTotal.toFixed(2)}</div>`;
 
       document.getElementById("cartDetails").innerHTML = html;

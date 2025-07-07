@@ -147,6 +147,21 @@
     }
     footer a:hover { text-decoration: underline; }
 
+    .filters {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    select {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 0.9rem;
+    }
+
     @media (max-width: 1200px) {
       .book-card { flex: 0 1 calc(20% - 20px); }
     }
@@ -183,6 +198,13 @@
     🛒 Click the Cart button on the top right to checkout after adding books.
   </div>
 
+  <!-- Filters -->
+  <div class="filters">
+    <select id="genreFilter"><option value="">All Genres</option></select>
+    <select id="authorFilter"><option value="">All Authors</option></select>
+    <select id="languageFilter"><option value="">All Languages</option></select>
+  </div>
+
   <!-- SECTIONS -->
   <h2 class="section-title">eBooks</h2>
   <section class="book-grid" id="ebooksSection"></section>
@@ -199,8 +221,6 @@
     <br>
     CEO: Haru Theav Yuki<br>
     &copy; 2025 HaruTech. All rights reserved.
-    
-    <!-- Flag Counter -->
     <div style="text-align: center; margin-top: 15px;">
       <a href="https://info.flagcounter.com/j4Dh">
         <img src="https://s01.flagcounter.com/count2/j4Dh/bg_FFFFFF/txt_000000/border_CCCCCC/columns_2/maxflags_10/viewers_0/labels_0/pageviews_0/flags_0/percent_0/" alt="Flag Counter" border="0">
@@ -236,38 +256,71 @@
 
     const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvfkGr1hd4NJK-jylkCAdVx8WDd9jw1aFXU4QSHWExNgAMOLfKAoNZ-93022FBBf_yBOLxEFMm1ffa/pub?gid=0&single=true&output=csv";
 
+    let booksData = [];
+
     async function fetchBooks() {
       const response = await fetch(sheetURL);
       const data = await response.text();
       const parsed = Papa.parse(data, { header: true }).data;
+
+      booksData = parsed.filter(row => row.ID && row.Title);
+      populateFilters();
+      applyFilters(); // Apply default filters (none)
+    }
+
+    function populateFilters() {
+      const genreSet = new Set();
+      const authorSet = new Set();
+      const langSet = new Set();
+
+      booksData.forEach(book => {
+        genreSet.add(book.Genre);
+        authorSet.add(book.Author);
+        langSet.add(book.Language);
+      });
+
+      populateSelect("genreFilter", genreSet);
+      populateSelect("authorFilter", authorSet);
+      populateSelect("languageFilter", langSet);
+    }
+
+    function populateSelect(id, set) {
+      const select = document.getElementById(id);
+      set.forEach(value => {
+        const opt = document.createElement("option");
+        opt.value = value;
+        opt.textContent = value;
+        select.appendChild(opt);
+      });
+    }
+
+    function applyFilters() {
+      const genre = document.getElementById("genreFilter").value;
+      const author = document.getElementById("authorFilter").value;
+      const language = document.getElementById("languageFilter").value;
 
       const ebooksSection = document.getElementById("ebooksSection");
       const paperbacksSection = document.getElementById("paperbacksSection");
       ebooksSection.innerHTML = "";
       paperbacksSection.innerHTML = "";
 
-      parsed.forEach(row => {
-        const {
-          ID: id,
-          Title: title,
-          Author: author,
-          Price: price,
-          ImageURL: imageURL,
-          Type: type,
-          BuyURL: buyURL
-        } = row;
+      const filtered = booksData.filter(b =>
+        (!genre || b.Genre === genre) &&
+        (!author || b.Author === author) &&
+        (!language || b.Language === language)
+      );
 
-        if (!id || !title) return;
+      filtered.forEach(row => {
+        const { ID: id, Title: title, Author: author, Price: price, ImageURL: imageURL, Type: type, BuyURL: buyURL } = row;
 
-        const trimmedBuyURL = buyURL?.trim();
         const cardHTML = `
           <div class="book-card" data-id="${id}">
             <img src="${imageURL}" alt="${title}">
             <h4>${title}</h4>
             <p><strong>Author:</strong> ${author}</p>
             <p class="price" data-price="${price}">₹${price}</p>
-            ${trimmedBuyURL
-              ? `<a href="${trimmedBuyURL}" class="buy-button" target="_blank">Read Now</a>`
+            ${buyURL?.trim()
+              ? `<a href="${buyURL}" class="buy-button" target="_blank">Read Now</a>`
               : `<button class="buy-button" onclick="addToCart('${title}', ${price})">Add to Cart</button>`}
           </div>
         `;
@@ -281,6 +334,10 @@
 
       updateCurrency();
     }
+
+    document.getElementById("genreFilter").addEventListener("change", applyFilters);
+    document.getElementById("authorFilter").addEventListener("change", applyFilters);
+    document.getElementById("languageFilter").addEventListener("change", applyFilters);
 
     window.onload = fetchBooks;
   </script>

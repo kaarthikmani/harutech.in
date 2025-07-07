@@ -65,14 +65,21 @@
       text-decoration: none;
     }
 
+    h2.section-title {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 1.6rem;
+      color: #4a00e0;
+    }
+
     .book-grid {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 20px;
       padding: 40px 20px;
-      background: #f6f9fc;
     }
+
     .book-card {
       flex: 0 1 calc(14.28% - 20px);
       max-width: 160px;
@@ -83,18 +90,7 @@
       box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
       position: relative;
     }
-    .book-card::before {
-      content: attr(data-id);
-      position: absolute;
-      top: -10px;
-      left: -10px;
-      background: #4a00e0;
-      color: white;
-      font-size: 0.8rem;
-      font-weight: bold;
-      padding: 4px 8px;
-      border-radius: 0 0 10px 0;
-    }
+
     .book-card img {
       width: 100%;
       height: auto;
@@ -123,6 +119,7 @@
       font-weight: 600;
       cursor: pointer;
     }
+
     .buy-button:hover {
       background-color: #3a00b2;
     }
@@ -173,8 +170,12 @@
     <a href="cart.html" id="cartLink">🛒 Cart</a>
   </header>
 
-  <!-- BOOK GRID CONTAINER -->
-  <section class="book-grid"></section>
+  <!-- SECTIONS -->
+  <h2 class="section-title">eBooks</h2>
+  <section class="book-grid" id="ebooksSection"></section>
+
+  <h2 class="section-title">Paperbacks</h2>
+  <section class="book-grid" id="paperbacksSection"></section>
 
   <footer>
     <div>
@@ -187,14 +188,6 @@
     &copy; 2025 HaruTech. All rights reserved.
   </footer>
 
-  <!-- Flag Counter -->
-  <div style="text-align: center; margin-top: 15px;">
-    <a href="https://info.flagcounter.com/j4Dh">
-      <img src="https://s01.flagcounter.com/count2/j4Dh/bg_FFFFFF/txt_000000/border_CCCCCC/columns_2/maxflags_10/viewers_0/labels_0/pageviews_0/flags_0/percent_0/" alt="Flag Counter" border="0">
-    </a>
-  </div>
-
-  <!-- SCRIPTS -->
   <script>
     const exchangeRates = {
       INR: 1,
@@ -226,40 +219,44 @@
     async function fetchBooks() {
       const response = await fetch(sheetURL);
       const data = await response.text();
-      const rows = data.split("\n").slice(1); // skip header
+      const rows = data.split("\n").slice(1);
 
-      const grid = document.querySelector(".book-grid");
-      grid.innerHTML = "";
+      const ebooksSection = document.getElementById("ebooksSection");
+      const paperbacksSection = document.getElementById("paperbacksSection");
+      ebooksSection.innerHTML = "";
+      paperbacksSection.innerHTML = "";
 
       rows.forEach(row => {
-  const cols = row.split(",");
-  if (cols.length < 7) return;
+        const cols = row.split(",");
+        if (cols.length < 7) return;
 
-  const clean = cols.map(col => col.replace(/^"|"$/g, '').trim());
-const [id, title, author, price, imageURL, type, buyURL] = clean;
+        const clean = cols.map(col => col.replace(/^"|"$/g, '').trim());
+        const [id, title, author, price, imageURL, type, buyURL] = clean;
 
+        const trimmedBuyURL = buyURL?.trim();
+        const cardHTML = `
+          <div class="book-card" data-id="${id}">
+            <img src="${imageURL}" alt="${title}">
+            <h4>${title}</h4>
+            <p><strong>Author:</strong> ${author}</p>
+            <p class="price" data-price="${price}">₹${price}</p>
+            ${trimmedBuyURL
+              ? `<a href="${trimmedBuyURL}" class="buy-button" target="_blank">Buy Now</a>`
+              : `<button class="buy-button" onclick="addToCart('${title}', ${price})">Add to Cart</button>`}
+          </div>
+        `;
 
-  const trimmedBuyURL = buyURL?.trim();
+        if (type.toLowerCase() === "ebook") {
+          ebooksSection.innerHTML += cardHTML;
+        } else if (type.toLowerCase() === "paperback") {
+          paperbacksSection.innerHTML += cardHTML;
+        }
+      });
 
-  grid.innerHTML += `
-    <div class="book-card" data-id="${id}">
-      <img src="${imageURL.trim()}" alt="${title}">
-      <h4>${title}</h4>
-      <p><strong>Author:</strong> ${author}</p>
-      <p class="price" data-price="${price}">₹${price}</p>
-      ${trimmedBuyURL
-        ? `<a href="${trimmedBuyURL}" class="buy-button" target="_blank">Buy Now</a>`
-        : `<button class="buy-button" onclick="addToCart('${title}', ${price})">Add to Cart</button>`}
-    </div>
-  `;
-});
-
-
-      updateCurrency(); // Apply selected currency after loading
+      updateCurrency();
     }
 
     window.onload = fetchBooks;
   </script>
-
 </body>
 </html>

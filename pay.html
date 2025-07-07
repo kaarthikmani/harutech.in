@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payment | HaruTech Book Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f6f9fc;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    header {
+      background: linear-gradient(to right, #4a00e0, #8e2de2);
+      color: white;
+      padding: 30px;
+      text-align: center;
+      position: relative;
+    }
+    h1 { margin-bottom: 10px; }
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .total, .delivery, .final {
+      text-align: right;
+      margin-top: 10px;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+    .currency {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    select {
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    .qr {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .qr img {
+      max-width: 250px;
+      border-radius: 12px;
+    }
+    .note {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.95rem;
+      color: #666;
+    }
+    .whatsapp {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .whatsapp a {
+      color: green;
+      font-weight: bold;
+      text-decoration: none;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Complete Your Payment</h1>
+  <p>HaruBooks by HaruTech</p>
+</header>
+
+<div class="container">
+  <div class="currency">
+    <label for="currency">Select Currency:</label>
+    <select id="currency" onchange="renderPayment()">
+      <option value="INR">₹ INR (India)</option>
+      <option value="USD">$ USD (Outside India)</option>
+      <option value="KHR">៛ KHR (Outside India)</option>
+    </select>
+  </div>
+
+  <div id="cartItems"></div>
+  <div class="delivery" id="deliveryLine"></div>
+  <div class="final" id="finalTotal"></div>
+
+  <div class="qr" id="qrSection"></div>
+
+  <div class="note" id="deliveryNote"></div>
+
+  <div class="whatsapp">
+    <p>Need help? Message us on WhatsApp:</p>
+    <a href="https://wa.me/919840967484" target="_blank">📞 +91 98409 67484</a>
+  </div>
+</div>
+
+<script>
+  const exchangeRates = {
+    INR: 1,
+    USD: 0.012,
+    KHR: 50
+  };
+
+  const qrCodes = {
+    INR: "Rupees.jpg",
+    USD: "Dollars.jpg",
+    KHR: "Riel.jpg"
+  };
+
+  function renderPayment() {
+    const currency = document.getElementById("currency").value;
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const symbol = currency === "INR" ? "₹" : currency === "USD" ? "$" : "៛";
+
+    const cartList = document.getElementById("cartItems");
+    cartList.innerHTML = "";
+
+    let subtotal = 0;
+
+    cart.forEach(item => {
+      const convertedPrice = item.price * exchangeRates[currency];
+      subtotal += convertedPrice;
+
+      cartList.innerHTML += `
+        <div class="cart-item">
+          <span>${item.title}</span>
+          <span>${symbol}${convertedPrice.toFixed(2)}</span>
+        </div>
+      `;
+    });
+
+    let delivery = 0;
+    let deliveryText = "";
+
+    if (currency === "INR") {
+      if (cart.length <= 5) {
+        delivery = cart.length * 50;
+        deliveryText = `Delivery Charge: ₹50 x ${cart.length} = ₹${delivery}`;
+      } else {
+        delivery = 0;
+        deliveryText = `🎉 Free Delivery (Above 5 Books)`;
+      }
+    } else {
+      deliveryText = "Delivery charge will be informed via WhatsApp within 48 hours.";
+    }
+
+    const total = subtotal + delivery;
+
+    document.getElementById("deliveryLine").innerText = deliveryText;
+    document.getElementById("finalTotal").innerText = `Total: ${symbol}${total.toFixed(2)}`;
+
+    // Show QR Code
+    const qrFile = qrCodes[currency];
+    document.getElementById("qrSection").innerHTML = `
+      <h3>Scan to Pay</h3>
+      <img src="${qrFile}" alt="QR Code for ${currency}">
+    `;
+
+    // Delivery note
+    document.getElementById("deliveryNote").innerText = currency === "INR"
+      ? "Delivery inside India only. For outside India, WhatsApp us before paying."
+      : "Make sure to contact us after payment with your shipping address.";
+  }
+
+  window.onload = renderPayment;
+</script>
+
+</body>
+</html>

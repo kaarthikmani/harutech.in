@@ -223,6 +223,7 @@ function removeItem(index) {
   try {
     const response = await fetch("https://script.google.com/macros/s/YOUR_NEW_DEPLOYED_URL/exec", {
 
+
       method: "POST",
       body: JSON.stringify({
         name, mobile, email, address, currency, totalAmount, bookTitles

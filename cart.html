@@ -221,7 +221,8 @@ function removeItem(index) {
   const bookTitles = cart.map(item => item.title).join(", ");
 
   try {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbz2YQJGBe8VDd5RI13ftBO9pHxKHDOKfqvdxcRXvBVfc_CsMWuAnrypA89xgS82rzQcfA/exec", {
+    const response = await fetch("https://script.google.com/macros/s/YOUR_NEW_DEPLOYED_URL/exec", {
+
       method: "POST",
       body: JSON.stringify({
         name, mobile, email, address, currency, totalAmount, bookTitles

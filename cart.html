@@ -235,14 +235,22 @@
   });
 
   try {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbwJCpWTbJt6hZWW73ZV1FuBUvXGNJJ2HfVE2CDor0sU-AubPvYjmH1cOi_qROrvosRl/exec", {
-
+    const response = await fetch("https://formspree.io/f/xwpbjrvy", {
   method: "POST",
-  headers: { "Content-Type": "application/json" },
+  headers: {
+    "Content-Type": "application/json"
+  },
   body: JSON.stringify({
-    name, mobile, email, address, currency, totalAmount, bookTitles
+    name,
+    mobile,
+    email,
+    address,
+    currency,
+    totalAmount,
+    bookTitles
   })
 });
+
 
 
     const responseText = await response.text();

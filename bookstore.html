@@ -215,11 +215,19 @@
       });
     }
     function addToCart(title, price) {
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
-      cart.push({ title, price });
-      localStorage.setItem("cart", JSON.stringify(cart));
-      alert(`${title} added to cart`);
-    }
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const existing = cart.find(item => item.title === title);
+
+  if (existing) {
+    existing.quantity += 1;
+  } else {
+    cart.push({ title, price, quantity: 1 });
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+  alert(`${title} added to cart`);
+}
+
     const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvfkGr1hd4NJK-jylkCAdVx8WDd9jw1aFXU4QSHWExNgAMOLfKAoNZ-93022FBBf_yBOLxEFMm1ffa/pub?gid=0&single=true&output=csv";
     let booksData = [], currentPage = 1, booksPerPage = 30;
     async function fetchBooks() {

@@ -9,7 +9,6 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Poppins', sans-serif; background: #f6f9fc; color: #333; }
-
     header {
       text-align: center;
       padding: 50px 20px 30px;
@@ -17,7 +16,6 @@
       color: white;
       position: relative;
     }
-
     header img {
       height: 50px;
       margin-bottom: 10px;
@@ -26,7 +24,6 @@
       font-size: 2.4rem;
       margin: 10px 0 10px;
     }
-
     .cta-buttons {
       display: flex;
       justify-content: center;
@@ -46,7 +43,6 @@
     .cta-buttons a:nth-child(1) { background: #00bcd4; }
     .cta-buttons a:nth-child(2) { background: #e91e63; }
     .cta-buttons a:nth-child(3) { background: #4caf50; }
-
     #currencySelector {
       position: absolute;
       top: 20px;
@@ -56,7 +52,6 @@
       border: none;
       font-size: 0.9rem;
     }
-
     #cartLink {
       position: absolute;
       top: 20px;
@@ -65,14 +60,12 @@
       font-weight: bold;
       text-decoration: none;
     }
-
     h2.section-title {
       text-align: center;
       margin-top: 40px;
       font-size: 1.6rem;
       color: #4a00e0;
     }
-
     .book-grid {
       display: flex;
       flex-wrap: wrap;
@@ -80,7 +73,6 @@
       gap: 20px;
       padding: 40px 20px;
     }
-
     .book-card {
       flex: 0 1 calc(14.28% - 20px);
       max-width: 160px;
@@ -91,7 +83,6 @@
       box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
       position: relative;
     }
-
     .book-card img {
       width: 100%;
       height: auto;
@@ -120,11 +111,9 @@
       font-weight: 600;
       cursor: pointer;
     }
-
     .buy-button:hover {
       background-color: #3a00b2;
     }
-
     .info-banner {
       background: #fff3cd;
       padding: 12px;
@@ -132,7 +121,6 @@
       font-weight: bold;
       color: #856404;
     }
-
     footer {
       background: #1a1a1a;
       padding: 30px;
@@ -146,7 +134,6 @@
       margin: 0 10px;
     }
     footer a:hover { text-decoration: underline; }
-
     .filters {
       display: flex;
       justify-content: center;
@@ -154,14 +141,12 @@
       gap: 10px;
       margin-top: 30px;
     }
-
     select {
       padding: 8px 12px;
       border-radius: 6px;
       border: 1px solid #ccc;
       font-size: 0.9rem;
     }
-
     @media (max-width: 1200px) {
       .book-card { flex: 0 1 calc(20% - 20px); }
     }
@@ -174,18 +159,15 @@
   </style>
 </head>
 <body>
-
   <header>
     <img src="logo.png" alt="HaruTech Logo">
     <div>The New Permanent</div>
     <h1>BOOK STORE</h1>
-
     <div class="cta-buttons">
       <a href="index.html">Home</a>
       <a href="products.html">Softwares</a>
       <a href="store.html">Dresses</a>
     </div>
-
     <select id="currencySelector" onchange="updateCurrency()">
       <option value="INR">₹ INR</option>
       <option value="USD">$ USD</option>
@@ -193,25 +175,18 @@
     </select>
     <a href="cart.html" id="cartLink">🛒 Cart</a>
   </header>
-
   <div class="info-banner">
     🛒 Click the Cart button on the top right to checkout after adding books.
   </div>
-
-  <!-- Filters -->
   <div class="filters">
     <select id="genreFilter"><option value="">All Genres</option></select>
     <select id="authorFilter"><option value="">All Authors</option></select>
     <select id="languageFilter"><option value="">All Languages</option></select>
   </div>
-
-  <!-- SECTIONS -->
   <h2 class="section-title">eBooks</h2>
   <section class="book-grid" id="ebooksSection"></section>
-
   <h2 class="section-title">Paperbacks</h2>
   <section class="book-grid" id="paperbacksSection"></section>
-
   <footer>
     <div>
       <a href="download.html">Download</a> |
@@ -227,18 +202,11 @@
       </a>
     </div>
   </footer>
-
   <script>
-    const exchangeRates = {
-      INR: 1,
-      USD: 0.012,
-      KHR: 50
-    };
-
+    const exchangeRates = { INR: 1, USD: 0.012, KHR: 50 };
     function updateCurrency() {
       const currency = document.getElementById("currencySelector").value;
       const prices = document.querySelectorAll(".price");
-
       prices.forEach(p => {
         const base = parseFloat(p.getAttribute("data-price"));
         const converted = base * exchangeRates[currency];
@@ -246,44 +214,33 @@
         p.innerText = symbol + converted.toFixed(2);
       });
     }
-
     function addToCart(title, price) {
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
       cart.push({ title, price });
       localStorage.setItem("cart", JSON.stringify(cart));
       alert(`${title} added to cart`);
     }
-
     const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvfkGr1hd4NJK-jylkCAdVx8WDd9jw1aFXU4QSHWExNgAMOLfKAoNZ-93022FBBf_yBOLxEFMm1ffa/pub?gid=0&single=true&output=csv";
-
-    let booksData = [];
-
+    let booksData = [], currentPage = 1, booksPerPage = 30;
     async function fetchBooks() {
       const response = await fetch(sheetURL);
       const data = await response.text();
       const parsed = Papa.parse(data, { header: true }).data;
-
       booksData = parsed.filter(row => row.ID && row.Title);
       populateFilters();
-      applyFilters(); // Apply default filters (none)
+      applyFilters();
     }
-
     function populateFilters() {
-      const genreSet = new Set();
-      const authorSet = new Set();
-      const langSet = new Set();
-
+      const genreSet = new Set(), authorSet = new Set(), langSet = new Set();
       booksData.forEach(book => {
         genreSet.add(book.Genre);
         authorSet.add(book.Author);
         langSet.add(book.Language);
       });
-
       populateSelect("genreFilter", genreSet);
       populateSelect("authorFilter", authorSet);
       populateSelect("languageFilter", langSet);
     }
-
     function populateSelect(id, set) {
       const select = document.getElementById(id);
       set.forEach(value => {
@@ -293,26 +250,25 @@
         select.appendChild(opt);
       });
     }
-
-    function applyFilters() {
+    function applyFilters(page = 1) {
+      currentPage = page;
       const genre = document.getElementById("genreFilter").value;
       const author = document.getElementById("authorFilter").value;
       const language = document.getElementById("languageFilter").value;
-
       const ebooksSection = document.getElementById("ebooksSection");
       const paperbacksSection = document.getElementById("paperbacksSection");
       ebooksSection.innerHTML = "";
       paperbacksSection.innerHTML = "";
-
       const filtered = booksData.filter(b =>
         (!genre || b.Genre === genre) &&
         (!author || b.Author === author) &&
         (!language || b.Language === language)
       );
-
-      filtered.forEach(row => {
+      const start = (currentPage - 1) * booksPerPage;
+      const end = start + booksPerPage;
+      const paginated = filtered.slice(start, end);
+      paginated.forEach(row => {
         const { ID: id, Title: title, Author: author, Price: price, ImageURL: imageURL, Type: type, BuyURL: buyURL } = row;
-
         const cardHTML = `
           <div class="book-card" data-id="${id}">
             <img src="${imageURL}" alt="${title}">
@@ -324,162 +280,31 @@
               : `<button class="buy-button" onclick="addToCart('${title}', ${price})">Add to Cart</button>`}
           </div>
         `;
-
-        if (type.toLowerCase() === "ebook") {
-          ebooksSection.innerHTML += cardHTML;
-        } else if (type.toLowerCase() === "paperback") {
-          paperbacksSection.innerHTML += cardHTML;
-        }
+        if (type.toLowerCase() === "ebook") ebooksSection.innerHTML += cardHTML;
+        else if (type.toLowerCase() === "paperback") paperbacksSection.innerHTML += cardHTML;
       });
-
       updateCurrency();
+      renderPagination(filtered.length);
     }
-
-    document.getElementById("genreFilter").addEventListener("change", applyFilters);
-    document.getElementById("authorFilter").addEventListener("change", applyFilters);
-    document.getElementById("languageFilter").addEventListener("change", applyFilters);
-
-    <script>
-const exchangeRates = {
-  INR: 1,
-  USD: 0.012,
-  KHR: 50
-};
-
-function updateCurrency() {
-  const currency = document.getElementById("currencySelector").value;
-  const prices = document.querySelectorAll(".price");
-  prices.forEach(p => {
-    const base = parseFloat(p.getAttribute("data-price"));
-    const converted = base * exchangeRates[currency];
-    const symbol = currency === "INR" ? "₹" : currency === "USD" ? "$" : "៛";
-    p.innerText = symbol + converted.toFixed(2);
-  });
-}
-
-function addToCart(title, price) {
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  cart.push({ title, price });
-  localStorage.setItem("cart", JSON.stringify(cart));
-  alert(`${title} added to cart`);
-}
-
-const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvfkGr1hd4NJK-jylkCAdVx8WDd9jw1aFXU4QSHWExNgAMOLfKAoNZ-93022FBBf_yBOLxEFMm1ffa/pub?gid=0&single=true&output=csv";
-
-let booksData = [];
-let currentPage = 1;
-const booksPerPage = 30;
-
-async function fetchBooks() {
-  const response = await fetch(sheetURL);
-  const data = await response.text();
-  const parsed = Papa.parse(data, { header: true }).data;
-  booksData = parsed.filter(row => row.ID && row.Title);
-  populateFilters();
-  applyFilters();
-}
-
-function populateFilters() {
-  const genreSet = new Set();
-  const authorSet = new Set();
-  const langSet = new Set();
-
-  booksData.forEach(book => {
-    genreSet.add(book.Genre);
-    authorSet.add(book.Author);
-    langSet.add(book.Language);
-  });
-
-  populateSelect("genreFilter", genreSet);
-  populateSelect("authorFilter", authorSet);
-  populateSelect("languageFilter", langSet);
-}
-
-function populateSelect(id, set) {
-  const select = document.getElementById(id);
-  set.forEach(value => {
-    const opt = document.createElement("option");
-    opt.value = value;
-    opt.textContent = value;
-    select.appendChild(opt);
-  });
-}
-
-function applyFilters(page = 1) {
-  currentPage = page;
-  const genre = document.getElementById("genreFilter").value;
-  const author = document.getElementById("authorFilter").value;
-  const language = document.getElementById("languageFilter").value;
-
-  const ebooksSection = document.getElementById("ebooksSection");
-  const paperbacksSection = document.getElementById("paperbacksSection");
-  ebooksSection.innerHTML = "";
-  paperbacksSection.innerHTML = "";
-
-  const filtered = booksData.filter(b =>
-    (!genre || b.Genre === genre) &&
-    (!author || b.Author === author) &&
-    (!language || b.Language === language)
-  );
-
-  const start = (currentPage - 1) * booksPerPage;
-  const end = start + booksPerPage;
-  const paginated = filtered.slice(start, end);
-
-  paginated.forEach(row => {
-    const { ID: id, Title: title, Author: author, Price: price, ImageURL: imageURL, Type: type, BuyURL: buyURL } = row;
-
-    const cardHTML = `
-      <div class="book-card" data-id="${id}">
-        <img src="${imageURL}" alt="${title}">
-        <h4>${title}</h4>
-        <p><strong>Author:</strong> ${author}</p>
-        <p class="price" data-price="${price}">₹${price}</p>
-        ${buyURL?.trim()
-          ? `<a href="${buyURL}" class="buy-button" target="_blank">Read Now</a>`
-          : `<button class="buy-button" onclick="addToCart('${title}', ${price})">Add to Cart</button>`}
-      </div>
-    `;
-
-    if (type.toLowerCase() === "ebook") {
-      ebooksSection.innerHTML += cardHTML;
-    } else if (type.toLowerCase() === "paperback") {
-      paperbacksSection.innerHTML += cardHTML;
+    function renderPagination(totalBooks) {
+      let totalPages = Math.ceil(totalBooks / booksPerPage);
+      let paginationHTML = "";
+      if (totalPages <= 1) return;
+      paginationHTML += `<div style="text-align:center; margin-bottom:30px;">`;
+      if (currentPage > 1)
+        paginationHTML += `<button onclick="applyFilters(${currentPage - 1})">« Prev</button> `;
+      for (let i = 1; i <= totalPages; i++) {
+        paginationHTML += `<button onclick="applyFilters(${i})" style="margin:0 4px;${i === currentPage ? 'font-weight:bold;' : ''}">${i}</button>`;
+      }
+      if (currentPage < totalPages)
+        paginationHTML += ` <button onclick="applyFilters(${currentPage + 1})">Next »</button>`;
+      paginationHTML += `</div>`;
+      document.getElementById("ebooksSection").insertAdjacentHTML("beforebegin", paginationHTML);
     }
-  });
-
-  updateCurrency();
-  renderPagination(filtered.length);
-}
-
-function renderPagination(totalBooks) {
-  let totalPages = Math.ceil(totalBooks / booksPerPage);
-  let paginationHTML = "";
-
-  if (totalPages <= 1) return; // No need for pagination
-
-  paginationHTML += `<div style="text-align:center; margin-bottom:30px;">`;
-  if (currentPage > 1)
-    paginationHTML += `<button onclick="applyFilters(${currentPage - 1})">« Prev</button> `;
-
-  for (let i = 1; i <= totalPages; i++) {
-    paginationHTML += `<button onclick="applyFilters(${i})" style="margin:0 4px;${i === currentPage ? 'font-weight:bold;' : ''}">${i}</button>`;
-  }
-
-  if (currentPage < totalPages)
-    paginationHTML += ` <button onclick="applyFilters(${currentPage + 1})">Next »</button>`;
-  paginationHTML += `</div>`;
-
-  document.getElementById("ebooksSection").insertAdjacentHTML("beforebegin", paginationHTML);
-}
-
-document.getElementById("genreFilter").addEventListener("change", () => applyFilters(1));
-document.getElementById("authorFilter").addEventListener("change", () => applyFilters(1));
-document.getElementById("languageFilter").addEventListener("change", () => applyFilters(1));
-
-window.onload = fetchBooks;
-
-
+    document.getElementById("genreFilter").addEventListener("change", () => applyFilters(1));
+    document.getElementById("authorFilter").addEventListener("change", () => applyFilters(1));
+    document.getElementById("languageFilter").addEventListener("change", () => applyFilters(1));
+    fetchBooks();
   </script>
 </body>
 </html>

@@ -236,14 +236,13 @@
 
   try {
     const response = await fetch("https://script.google.com/macros/s/AKfycbwrToFcU2r5-gj_K72yCIEUqASq4tTlcj53FkPqS4Z1OCIw46JIyx42ymGmt8gymD41tQ/exec", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    name, mobile, email, address, currency, totalAmount, bookTitles
+  })
+});
 
-
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name, mobile, email, address, currency, totalAmount, bookTitles
-      })
-    });
 
     const responseText = await response.text();
     console.log("✅ Response:", response.status, responseText);

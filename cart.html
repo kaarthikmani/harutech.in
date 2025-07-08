@@ -217,12 +217,11 @@ function removeItem(index) {
   }
 
   const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) +
-
     (currency === "INR" ? cart.length * 50 : 0);
   const bookTitles = cart.map(item => item.title).join(", ");
 
   try {
-    await fetch("https://script.google.com/macros/s/AKfycbz2YQJGBe8VDd5RI13ftBO9pHxKHDOKfqvdxcRXvBVfc_CsMWuAnrypA89xgS82rzQcfA/exec", {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbz2YQJGBe8VDd5RI13ftBO9pHxKHDOKfqvdxcRXvBVfc_CsMWuAnrypA89xgS82rzQcfA/exec", {
       method: "POST",
       body: JSON.stringify({
         name, mobile, email, address, currency, totalAmount, bookTitles
@@ -230,14 +229,22 @@ function removeItem(index) {
       headers: { "Content-Type": "application/json" }
     });
 
+    const responseText = await response.text();
+    console.log("Response status:", response.status);
+    console.log("Response body:", responseText);
+
+    if (!response.ok) throw new Error("Bad response");
+
     window.open(`https://wa.me/919840967484?text=📚 New order from ${name}%0A%0A📞 ${mobile}%0A📧 ${email}%0A🏠 ${address}%0A💵 Currency: ${currency}%0A💰 Total: ${totalAmount}%0A📖 Books: ${bookTitles}`, '_blank');
 
     window.location.href = "pay.html";
-  } catch (error) {
+    } catch (error) {
     alert("Failed to submit order. Please try again.");
     console.error(error);
   }
+
 }
+
 
 
     window.onload = updateCartDisplay;

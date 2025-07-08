@@ -339,7 +339,147 @@
     document.getElementById("authorFilter").addEventListener("change", applyFilters);
     document.getElementById("languageFilter").addEventListener("change", applyFilters);
 
-    window.onload = fetchBooks;
+    <script>
+const exchangeRates = {
+  INR: 1,
+  USD: 0.012,
+  KHR: 50
+};
+
+function updateCurrency() {
+  const currency = document.getElementById("currencySelector").value;
+  const prices = document.querySelectorAll(".price");
+  prices.forEach(p => {
+    const base = parseFloat(p.getAttribute("data-price"));
+    const converted = base * exchangeRates[currency];
+    const symbol = currency === "INR" ? "₹" : currency === "USD" ? "$" : "៛";
+    p.innerText = symbol + converted.toFixed(2);
+  });
+}
+
+function addToCart(title, price) {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart.push({ title, price });
+  localStorage.setItem("cart", JSON.stringify(cart));
+  alert(`${title} added to cart`);
+}
+
+const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvfkGr1hd4NJK-jylkCAdVx8WDd9jw1aFXU4QSHWExNgAMOLfKAoNZ-93022FBBf_yBOLxEFMm1ffa/pub?gid=0&single=true&output=csv";
+
+let booksData = [];
+let currentPage = 1;
+const booksPerPage = 30;
+
+async function fetchBooks() {
+  const response = await fetch(sheetURL);
+  const data = await response.text();
+  const parsed = Papa.parse(data, { header: true }).data;
+  booksData = parsed.filter(row => row.ID && row.Title);
+  populateFilters();
+  applyFilters();
+}
+
+function populateFilters() {
+  const genreSet = new Set();
+  const authorSet = new Set();
+  const langSet = new Set();
+
+  booksData.forEach(book => {
+    genreSet.add(book.Genre);
+    authorSet.add(book.Author);
+    langSet.add(book.Language);
+  });
+
+  populateSelect("genreFilter", genreSet);
+  populateSelect("authorFilter", authorSet);
+  populateSelect("languageFilter", langSet);
+}
+
+function populateSelect(id, set) {
+  const select = document.getElementById(id);
+  set.forEach(value => {
+    const opt = document.createElement("option");
+    opt.value = value;
+    opt.textContent = value;
+    select.appendChild(opt);
+  });
+}
+
+function applyFilters(page = 1) {
+  currentPage = page;
+  const genre = document.getElementById("genreFilter").value;
+  const author = document.getElementById("authorFilter").value;
+  const language = document.getElementById("languageFilter").value;
+
+  const ebooksSection = document.getElementById("ebooksSection");
+  const paperbacksSection = document.getElementById("paperbacksSection");
+  ebooksSection.innerHTML = "";
+  paperbacksSection.innerHTML = "";
+
+  const filtered = booksData.filter(b =>
+    (!genre || b.Genre === genre) &&
+    (!author || b.Author === author) &&
+    (!language || b.Language === language)
+  );
+
+  const start = (currentPage - 1) * booksPerPage;
+  const end = start + booksPerPage;
+  const paginated = filtered.slice(start, end);
+
+  paginated.forEach(row => {
+    const { ID: id, Title: title, Author: author, Price: price, ImageURL: imageURL, Type: type, BuyURL: buyURL } = row;
+
+    const cardHTML = `
+      <div class="book-card" data-id="${id}">
+        <img src="${imageURL}" alt="${title}">
+        <h4>${title}</h4>
+        <p><strong>Author:</strong> ${author}</p>
+        <p class="price" data-price="${price}">₹${price}</p>
+        ${buyURL?.trim()
+          ? `<a href="${buyURL}" class="buy-button" target="_blank">Read Now</a>`
+          : `<button class="buy-button" onclick="addToCart('${title}', ${price})">Add to Cart</button>`}
+      </div>
+    `;
+
+    if (type.toLowerCase() === "ebook") {
+      ebooksSection.innerHTML += cardHTML;
+    } else if (type.toLowerCase() === "paperback") {
+      paperbacksSection.innerHTML += cardHTML;
+    }
+  });
+
+  updateCurrency();
+  renderPagination(filtered.length);
+}
+
+function renderPagination(totalBooks) {
+  let totalPages = Math.ceil(totalBooks / booksPerPage);
+  let paginationHTML = "";
+
+  if (totalPages <= 1) return; // No need for pagination
+
+  paginationHTML += `<div style="text-align:center; margin-bottom:30px;">`;
+  if (currentPage > 1)
+    paginationHTML += `<button onclick="applyFilters(${currentPage - 1})">« Prev</button> `;
+
+  for (let i = 1; i <= totalPages; i++) {
+    paginationHTML += `<button onclick="applyFilters(${i})" style="margin:0 4px;${i === currentPage ? 'font-weight:bold;' : ''}">${i}</button>`;
+  }
+
+  if (currentPage < totalPages)
+    paginationHTML += ` <button onclick="applyFilters(${currentPage + 1})">Next »</button>`;
+  paginationHTML += `</div>`;
+
+  document.getElementById("ebooksSection").insertAdjacentHTML("beforebegin", paginationHTML);
+}
+
+document.getElementById("genreFilter").addEventListener("change", () => applyFilters(1));
+document.getElementById("authorFilter").addEventListener("change", () => applyFilters(1));
+document.getElementById("languageFilter").addEventListener("change", () => applyFilters(1));
+
+window.onload = fetchBooks;
+
+
   </script>
 </body>
 </html>

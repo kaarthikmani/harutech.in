@@ -149,10 +149,23 @@
       let total = 0;
       let deliveryCharges = 0;
 
-      cart.forEach((item) => {
-        html += `<div class="cart-item-line"><span>${item.title}</span><span>${symbol}${item.price.toFixed(2)}</span></div>`;
-        total += item.price;
-      });
+      cart.forEach((item, index) => {
+  const itemTotal = item.price * item.quantity;
+  html += `
+    <div class="cart-item-line">
+      <span>
+        ${item.title} <br>
+        <button onclick="updateQty(${index}, -1)">➖</button>
+        <span style="margin: 0 8px;">${item.quantity}</span>
+        <button onclick="updateQty(${index}, 1)">➕</button>
+        <button onclick="removeItem(${index})">🗑️</button>
+      </span>
+      <span>${symbol}${itemTotal.toFixed(2)}</span>
+    </div>
+  `;
+  total += itemTotal;
+});
+
 
       if (currency === "INR" && cart.length > 0 && cart.length <= 5) {
         deliveryCharges = cart.length * 50;
@@ -171,6 +184,24 @@
       updateCartDisplay();
       alert("Cart cleared.");
     }
+function updateQty(index, change) {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart[index].quantity += change;
+
+  if (cart[index].quantity <= 0) {
+    cart.splice(index, 1);
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartDisplay();
+}
+
+function removeItem(index) {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart.splice(index, 1);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartDisplay();
+}
 
     async function submitOrder() {
   const name = document.getElementById("name").value.trim();

@@ -172,23 +172,41 @@
       alert("Cart cleared.");
     }
 
-    function submitOrder() {
-      const name = document.getElementById("name").value.trim();
-      const mobile = document.getElementById("mobile").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const address = document.getElementById("address").value.trim();
-      const currency = localStorage.getItem("selectedCurrency") || "INR";
+    async function submitOrder() {
+  const name = document.getElementById("name").value.trim();
+  const mobile = document.getElementById("mobile").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const address = document.getElementById("address").value.trim();
+  const currency = localStorage.getItem("selectedCurrency") || "INR";
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-      if (!name || !mobile || !email || !address) {
-        alert("Please fill all the fields before proceeding.");
-        return;
-      }
+  if (!name || !mobile || !email || !address || cart.length === 0) {
+    alert("Please fill all fields and add items to cart.");
+    return;
+  }
 
-      const userInfo = { name, mobile, email, address, currency };
-      localStorage.setItem("userInfo", JSON.stringify(userInfo));
+  const totalAmount = cart.reduce((sum, item) => sum + item.price, 0) +
+    (currency === "INR" ? cart.length * 50 : 0);
+  const bookTitles = cart.map(item => item.title).join(", ");
 
-      window.location.href = "pay.html";
-    }
+  try {
+    await fetch("https://script.google.com/macros/s/AKfycbz2YQJGBe8VDd5RI13ftBO9pHxKHDOKfqvdxcRXvBVfc_CsMWuAnrypA89xgS82rzQcfA/exec", {
+      method: "POST",
+      body: JSON.stringify({
+        name, mobile, email, address, currency, totalAmount, bookTitles
+      }),
+      headers: { "Content-Type": "application/json" }
+    });
+
+    window.open(`https://wa.me/919840967484?text=📚 New order from ${name}%0A%0A📞 ${mobile}%0A📧 ${email}%0A🏠 ${address}%0A💵 Currency: ${currency}%0A💰 Total: ${totalAmount}%0A📖 Books: ${bookTitles}`, '_blank');
+
+    window.location.href = "pay.html";
+  } catch (error) {
+    alert("Failed to submit order. Please try again.");
+    console.error(error);
+  }
+}
+
 
     window.onload = updateCartDisplay;
   </script>

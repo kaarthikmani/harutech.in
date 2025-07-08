@@ -193,7 +193,7 @@ function submitToSheet() {
   let delivery = (currency === "INR" && cart.length <= 5) ? cart.length * 50 : 0;
   let grandTotal = total + delivery;
 
-  fetch("https://script.google.com/macros/s/AKfycbyK3Bto2RJc7To5SRlv_OWfejGNpM-1XWZMNEu4CsxE6HsPV8rnNps3jVUWNagi5DFmmQ/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbxUvb6JERo1tetJHiBjygoqWK_M-YdpgMK5CDdpu9ASVWViWCNbaksRb1DQ81SCZJo_7A/exec", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

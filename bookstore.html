@@ -314,13 +314,7 @@
     paginationHTML += `<button onclick="applyFilters(${i})" style="margin:0 4px;${i === currentPage ? 'font-weight:bold;' : ''}">${i}</button>`;
   }
 
-  if (currentPage < totalPages)
-    paginationHTML += ` <button onclick="applyFilters(${currentPage + 1})">Next »</button>`;
-
-  paginationHTML += `</div>`;
-
-  document.getElementById("ebooksSection").insertAdjacentHTML("beforebegin", paginationHTML);
-}
+  
 
       if (currentPage < totalPages)
         paginationHTML += ` <button onclick="applyFilters(${currentPage + 1})">Next »</button>`;

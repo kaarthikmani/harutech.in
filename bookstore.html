@@ -329,6 +329,10 @@
   // Add bottom pagination before footer
   document.querySelector("footer").insertAdjacentHTML("beforebegin", paginationBottomHTML);
 }
+document.getElementById("genreFilter").addEventListener("change", () => applyFilters(1));
+document.getElementById("authorFilter").addEventListener("change", () => applyFilters(1));
+document.getElementById("languageFilter").addEventListener("change", () => applyFilters(1));
+fetchBooks();
 
   </script>
 </body>

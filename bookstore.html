@@ -159,9 +159,23 @@
     @media (max-width: 900px) {
       .book-card { flex: 0 1 calc(33.33% - 20px); }
     }
-    @media (max-width: 600px) {
-      .book-card { flex: 0 1 calc(50% - 20px); }
-    }
+    .share-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #eee;
+  border: none;
+  font-size: 1.2rem;
+  padding: 4px 6px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: background 0.2s;
+}
+.share-icon:hover {
+  background: #ccc;
+}
+
   </style>
 </head>
 <body>
@@ -301,6 +315,7 @@ applyFilters(pageFromURL);
         const { ID: id, Title: title, Author: author, Price: price, ImageURL: imageURL, Type: type, BuyURL: buyURL } = row;
         const cardHTML = `
   <div class="book-card" data-id="${id}">
+    <button class="share-icon" onclick="shareBook('${title}', '${author}', '${price}', '${imageURL}')">🔗</button>
     <img src="${imageURL}" alt="${title}">
     <h4>${title}</h4>
     <p><strong>Author:</strong> ${author}</p>
@@ -308,9 +323,9 @@ applyFilters(pageFromURL);
     ${buyURL?.trim()
       ? `<a href="${buyURL}" class="buy-button" target="_blank">Read Now</a>`
       : `<button class="buy-button" onclick="addToCart('${title}', ${price})">Add to Cart</button>`}
-    <button class="buy-button" onclick="shareBook('${title}', '${author}', '${price}', '${imageURL}')">🔗 Share</button>
   </div>
 `;
+
 
         if (type.toLowerCase() === "ebook") ebooksSection.innerHTML += cardHTML;
         else if (type.toLowerCase() === "paperback") paperbacksSection.innerHTML += cardHTML;

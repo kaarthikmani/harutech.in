@@ -280,10 +280,12 @@ applyFilters(pageFromURL);
   (!author || b.Author === author) &&
   (!language || b.Language === language) &&
   (!searchTerm || (
-    b.Title.toLowerCase().includes(searchTerm) ||
-    b.Author.toLowerCase().includes(searchTerm) ||
-    b.Genre.toLowerCase().includes(searchTerm)
-  ))
+  b.Title.toLowerCase().includes(searchTerm) ||
+  b.Author.toLowerCase().includes(searchTerm) ||
+  b.Genre.toLowerCase().includes(searchTerm) ||
+  (b.SearchTags && b.SearchTags.toLowerCase().includes(searchTerm))
+))
+
 );
 
       const start = (currentPage - 1) * booksPerPage;

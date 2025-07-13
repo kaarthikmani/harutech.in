@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Details | HaruTech</title>
+
+  <!-- Empty meta tags that will be filled by JavaScript -->
+  <meta property="og:title" content="" id="ogTitle">
+  <meta property="og:description" content="" id="ogDescription">
+  <meta property="og:image" content="" id="ogImage">
+  <meta property="og:url" content="" id="ogURL">
+  <meta property="og:type" content="website">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f4f4f4;
+      text-align: center;
+    }
+    img {
+      max-width: 300px;
+      border-radius: 10px;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      max-width: 500px;
+      margin: auto;
+    }
+    .price {
+      font-weight: bold;
+      color: #4a00e0;
+      margin: 10px 0;
+    }
+    .buy-button {
+      padding: 10px 20px;
+      background: #4a00e0;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="bookContainer">
+    <h2>Loading book details...</h2>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+  <script>
+    const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvfkGr1hd4NJK-jylkCAdVx8WDd9jw1aFXU4QSHWExNgAMOLfKAoNZ-93022FBBf_yBOLxEFMm1ffa/pub?gid=0&single=true&output=csv";
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const bookId = urlParams.get("id");
+
+    fetch(sheetURL)
+      .then(res => res.text())
+      .then(csv => {
+        const data = Papa.parse(csv, { header: true }).data;
+        const book = data.find(b => b.ID === bookId);
+
+        if (!book) {
+          document.getElementById("bookContainer").innerHTML = "<h2>Book not found.</h2>";
+          return;
+        }
+
+        // Inject Open Graph meta tags
+        document.getElementById("ogTitle").setAttribute("content", `${book.Title} by ${book.Author}`);
+        document.getElementById("ogDescription").setAttribute("content", `Explore ${book.Title}, a ${book.Genre} book by ${book.Author}`);
+        document.getElementById("ogImage").setAttribute("content", book.ImageURL);
+        document.getElementById("ogURL").setAttribute("content", window.location.href);
+
+        // Show book details
+        document.getElementById("bookContainer").innerHTML = `
+          <img src="${book.ImageURL}" alt="${book.Title}">
+          <h2>${book.Title}</h2>
+          <p><strong>Author:</strong> ${book.Author}</p>
+          <p class="price">₹${book.Price}</p>
+          ${book.BuyURL ? `<a href="${book.BuyURL}" class="buy-button" target="_blank">Read Now</a>` :
+          `<button class="buy-button" onclick="addToCart('${book.Title}', ${book.Price})">Add to Cart</button>`}
+        `;
+      });
+
+    function addToCart(title, price) {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const existing = cart.find(item => item.title === title);
+      if (existing) existing.quantity += 1;
+      else cart.push({ title, price: parseFloat(price), quantity: 1 });
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert(`${title} added to cart`);
+    }
+  </script>
+</body>
+</html>

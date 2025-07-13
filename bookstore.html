@@ -299,13 +299,14 @@
   let totalPages = Math.ceil(totalBooks / booksPerPage);
   if (totalPages <= 1) return;
 
-  // Remove existing pagination if any
-  const existingPagination = document.getElementById("ebooksPagination");
-  if (existingPagination) {
-    existingPagination.remove();
-  }
+  // Remove previous pagination blocks
+  const existingTop = document.getElementById("ebooksPaginationTop");
+  const existingBottom = document.getElementById("ebooksPaginationBottom");
+  if (existingTop) existingTop.remove();
+  if (existingBottom) existingBottom.remove();
 
-  let paginationHTML = `<div id="ebooksPagination" style="text-align:center; margin-bottom:30px;">`;
+  // Pagination HTML
+  let paginationHTML = `<div style="text-align:center; margin: 30px 0;" id="ebooksPaginationTop">`;
 
   if (currentPage > 1)
     paginationHTML += `<button onclick="applyFilters(${currentPage - 1})">« Prev</button> `;
@@ -314,17 +315,21 @@
     paginationHTML += `<button onclick="applyFilters(${i})" style="margin:0 4px;${i === currentPage ? 'font-weight:bold;' : ''}">${i}</button>`;
   }
 
-  
+  if (currentPage < totalPages)
+    paginationHTML += ` <button onclick="applyFilters(${currentPage + 1})">Next »</button>`;
 
-      if (currentPage < totalPages)
-        paginationHTML += ` <button onclick="applyFilters(${currentPage + 1})">Next »</button>`;
-      paginationHTML += `</div>`;
-      document.getElementById("ebooksSection").insertAdjacentHTML("beforebegin", paginationHTML);
-    }
-    document.getElementById("genreFilter").addEventListener("change", () => applyFilters(1));
-    document.getElementById("authorFilter").addEventListener("change", () => applyFilters(1));
-    document.getElementById("languageFilter").addEventListener("change", () => applyFilters(1));
-    fetchBooks();
+  paginationHTML += `</div>`;
+
+  // Bottom pagination (copy of top with new ID)
+  let paginationBottomHTML = paginationHTML.replace('ebooksPaginationTop', 'ebooksPaginationBottom');
+
+  // Add top pagination above eBooks
+  document.getElementById("ebooksSection").insertAdjacentHTML("beforebegin", paginationHTML);
+
+  // Add bottom pagination before footer
+  document.querySelector("footer").insertAdjacentHTML("beforebegin", paginationBottomHTML);
+}
+
   </script>
 </body>
 </html>

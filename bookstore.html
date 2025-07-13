@@ -300,16 +300,18 @@ applyFilters(pageFromURL);
       paginated.forEach(row => {
         const { ID: id, Title: title, Author: author, Price: price, ImageURL: imageURL, Type: type, BuyURL: buyURL } = row;
         const cardHTML = `
-          <div class="book-card" data-id="${id}">
-            <img src="${imageURL}" alt="${title}">
-            <h4>${title}</h4>
-            <p><strong>Author:</strong> ${author}</p>
-            <p class="price" data-price="${price}">₹${price}</p>
-            ${buyURL?.trim()
-              ? `<a href="${buyURL}" class="buy-button" target="_blank">Read Now</a>`
-              : `<button class="buy-button" onclick="addToCart('${title}', ${price})">Add to Cart</button>`}
-          </div>
-        `;
+  <div class="book-card" data-id="${id}">
+    <img src="${imageURL}" alt="${title}">
+    <h4>${title}</h4>
+    <p><strong>Author:</strong> ${author}</p>
+    <p class="price" data-price="${price}">₹${price}</p>
+    ${buyURL?.trim()
+      ? `<a href="${buyURL}" class="buy-button" target="_blank">Read Now</a>`
+      : `<button class="buy-button" onclick="addToCart('${title}', ${price})">Add to Cart</button>`}
+    <button class="buy-button" onclick="shareBook('${title}', '${author}', '${price}', '${imageURL}')">🔗 Share</button>
+  </div>
+`;
+
         if (type.toLowerCase() === "ebook") ebooksSection.innerHTML += cardHTML;
         else if (type.toLowerCase() === "paperback") paperbacksSection.innerHTML += cardHTML;
       });
@@ -356,6 +358,20 @@ document.getElementById("languageFilter").addEventListener("change", () => apply
 document.getElementById("searchInput").addEventListener("input", () => applyFilters(1));
     
 fetchBooks();
+function shareBook(title, author, price, imageURL) {
+  const url = window.location.href;
+  const text = `${title}\nAuthor: ${author}\nPrice: ₹${price}\n\n📚 View it on HaruTech Bookstore:\n${url}`;
+  
+  if (navigator.share) {
+    navigator.share({
+      title: title,
+      text: text,
+      url: url
+    }).catch(err => console.error("Sharing failed", err));
+  } else {
+    alert("Sharing is not supported on this device.\n\nCopy and share manually:\n" + text);
+  }
+}
 
   </script>
 </body>

@@ -296,15 +296,32 @@
       renderPagination(filtered.length);
     }
     function renderPagination(totalBooks) {
-      let totalPages = Math.ceil(totalBooks / booksPerPage);
-      let paginationHTML = "";
-      if (totalPages <= 1) return;
-      paginationHTML += `<div style="text-align:center; margin-bottom:30px;">`;
-      if (currentPage > 1)
-        paginationHTML += `<button onclick="applyFilters(${currentPage - 1})">« Prev</button> `;
-      for (let i = 1; i <= totalPages; i++) {
-        paginationHTML += `<button onclick="applyFilters(${i})" style="margin:0 4px;${i === currentPage ? 'font-weight:bold;' : ''}">${i}</button>`;
-      }
+  let totalPages = Math.ceil(totalBooks / booksPerPage);
+  if (totalPages <= 1) return;
+
+  // Remove existing pagination if any
+  const existingPagination = document.getElementById("ebooksPagination");
+  if (existingPagination) {
+    existingPagination.remove();
+  }
+
+  let paginationHTML = `<div id="ebooksPagination" style="text-align:center; margin-bottom:30px;">`;
+
+  if (currentPage > 1)
+    paginationHTML += `<button onclick="applyFilters(${currentPage - 1})">« Prev</button> `;
+
+  for (let i = 1; i <= totalPages; i++) {
+    paginationHTML += `<button onclick="applyFilters(${i})" style="margin:0 4px;${i === currentPage ? 'font-weight:bold;' : ''}">${i}</button>`;
+  }
+
+  if (currentPage < totalPages)
+    paginationHTML += ` <button onclick="applyFilters(${currentPage + 1})">Next »</button>`;
+
+  paginationHTML += `</div>`;
+
+  document.getElementById("ebooksSection").insertAdjacentHTML("beforebegin", paginationHTML);
+}
+
       if (currentPage < totalPages)
         paginationHTML += ` <button onclick="applyFilters(${currentPage + 1})">Next »</button>`;
       paginationHTML += `</div>`;

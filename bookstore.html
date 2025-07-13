@@ -316,15 +316,7 @@ applyFilters(pageFromURL);
         const cardHTML = `
   <div class="book-card" data-id="${id}">
     <button class="share-icon" onclick="shareBook('${title}', '${author}', '${price}', '${imageURL}', '${id}')">🔗</button>
-    <img src="${imageURL}" alt="${title}">
-    <h4>${title}</h4>
-    <p><strong>Author:</strong> ${author}</p>
-    <p class="price" data-price="${price}">₹${price}</p>
-    ${buyURL?.trim()
-      ? `<a href="${buyURL}" class="buy-button" target="_blank">Read Now</a>`
-      : `<button class="buy-button" onclick="addToCart('${title}', ${price})">Add to Cart</button>`}
-  </div>
-`;
+    
 
     <img src="${imageURL}" alt="${title}">
     <h4>${title}</h4>

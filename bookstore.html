@@ -179,10 +179,12 @@
     🛒 Click the Cart button on the top right to checkout after adding books.
   </div>
   <div class="filters">
-    <select id="genreFilter"><option value="">All Genres</option></select>
-    <select id="authorFilter"><option value="">All Authors</option></select>
-    <select id="languageFilter"><option value="">All Languages</option></select>
-  </div>
+  <input type="text" id="searchInput" placeholder="Search books..." style="padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.9rem; width: 200px;">
+  <select id="genreFilter"><option value="">All Genres</option></select>
+  <select id="authorFilter"><option value="">All Authors</option></select>
+  <select id="languageFilter"><option value="">All Languages</option></select>
+</div>
+
   <h2 class="section-title">eBooks</h2>
   <section class="book-grid" id="ebooksSection"></section>
   <h2 class="section-title">Paperbacks</h2>
@@ -237,7 +239,10 @@
       const parsed = Papa.parse(data, { header: true }).data;
       booksData = parsed.filter(row => row.ID && row.Title);
       populateFilters();
-      applyFilters();
+      const urlParams = new URLSearchParams(window.location.search);
+const pageFromURL = parseInt(urlParams.get("page")) || 1;
+applyFilters(pageFromURL);
+
     }
     function populateFilters() {
       const genreSet = new Set(), authorSet = new Set(), langSet = new Set();
@@ -261,18 +266,26 @@
     }
     function applyFilters(page = 1) {
       currentPage = page;
+      window.history.pushState({}, '', `?page=${page}`);
       const genre = document.getElementById("genreFilter").value;
       const author = document.getElementById("authorFilter").value;
       const language = document.getElementById("languageFilter").value;
+      const searchTerm = document.getElementById("searchInput").value.toLowerCase().trim();
       const ebooksSection = document.getElementById("ebooksSection");
       const paperbacksSection = document.getElementById("paperbacksSection");
       ebooksSection.innerHTML = "";
       paperbacksSection.innerHTML = "";
       const filtered = booksData.filter(b =>
-        (!genre || b.Genre === genre) &&
-        (!author || b.Author === author) &&
-        (!language || b.Language === language)
-      );
+  (!genre || b.Genre === genre) &&
+  (!author || b.Author === author) &&
+  (!language || b.Language === language) &&
+  (!searchTerm || (
+    b.Title.toLowerCase().includes(searchTerm) ||
+    b.Author.toLowerCase().includes(searchTerm) ||
+    b.Genre.toLowerCase().includes(searchTerm)
+  ))
+);
+
       const start = (currentPage - 1) * booksPerPage;
       const end = start + booksPerPage;
       const paginated = filtered.slice(start, end);
@@ -332,6 +345,8 @@
 document.getElementById("genreFilter").addEventListener("change", () => applyFilters(1));
 document.getElementById("authorFilter").addEventListener("change", () => applyFilters(1));
 document.getElementById("languageFilter").addEventListener("change", () => applyFilters(1));
+document.getElementById("searchInput").addEventListener("input", () => applyFilters(1));
+    
 fetchBooks();
 
   </script>
